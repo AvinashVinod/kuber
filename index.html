@@ -1,60 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tailwind in Plain HTML</title>
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Enable plugins for custom values -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css" />
     <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div class="relative h-[100vh] w-full">
-        <nav class="sticky inset-0 flex items-center">
-            <a class="logo__img h-[9vw] min-h-[6rem] w-[9vw] min-w-[6rem] inline-block overflow-hidden" href="">
-                <img src="./media/images/logo.png" alt="">
-            </a>
-            <div class="nav__container hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-fit">                
-               <div class="relative flex flex-col items-center">
-    <ul class="flex items-center font-light uppercase text-nowrap *:px-5 *:py-4 p-1 bg-black/50 backdrop-blur-md text-white rounded-lg">
-        <li class="nav__link hover:bg-white/20 hover:text-white rounded-tl-lg rounded-bl-lg overflow-hidden"><a href="#">home</a></li>
-        <li class="nav__link hover:bg-white/20 hover:text-white"><a href="#">about</a></li>
-        
-        <li class="group relative z-90 nav__link hover:bg-white/20 hover:text-white">
-    <a href="#">services</a>
-    
-    <div class="absolute top-0 left-0 -z-10 w-[250px] bg-black/50 text-white backdrop-blur-md rounded-lg overflow-hidden 
-                opacity-0 invisible 
-                group-hover:opacity-100 group-hover:visible group-hover:top-[112%]
-                transition-all duration-500 ease-in-out shadow-2xl">
-        
-        <ul class="flex flex-col p-1 capitalize">
-            <li class="hover:bg-white/20 p-3 rounded-md"><a href="#">Wedding Planning</a></li>
-            <li class="hover:bg-white/20 p-3 rounded-md"><a href="#">Design & Decoration</a></li>
-            <li class="hover:bg-white/20 p-3 rounded-md"><a href="#">Venue Booking</a></li>
-        </ul>
-    </div>
-</li>
+      <nav class="sticky inset-0 flex items-center">
+        <div
+            id="navbar"
+            class="nav__container hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 lg:-top-2 w-full"
+        >
+          <div class="relative flex flex-col items-center">
+            <ul
+              class="flex items-center gap-5 font-light uppercase text-nowrap pt-2 text-white"
+            >
+              <li class="nav__link px-5 py-4"><a href="#">home</a></li>
+              <li class="nav__link px-5 py-4"><a href="#">about</a></li>
 
-        <li class="nav__link hover:bg-white/20 hover:text-white"><a href="#">gallery</a></li>
-        <li class="nav__link hover:bg-white/20 hover:text-white rounded-tr-lg rounded-br-lg overflow-hidden"><a href="#">contact us</a></li>
-    </ul>
-</div>
-            </div>
-        </nav>
-        <div class="absolute inset-0 -z-[10] h-full w-full bg-black overflow-hidden p-2">
-            <video class="h-full rounded-lg" muted autoplay loop src="https://www.pexels.com/download/video/35542209/"></video>
+              <li
+                class="services__nav-link group relative z-90 nav__link px-5 py-4 hover:bg-white hover:text-[#ca8a04] rounded-md"
+              >
+                <a href="#">services</a>
+                <!-- support for hover glitch -->
+                <div class="absolute top-full left-0 h-20 w-full"></div>
+                <div
+                  class="nav__sub-nav absolute top-[105%] left-0 -z-0 w-[220px] bg-white text-black backdrop-blur-md rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible shadow-2xl"
+                >
+                  <ul class="nav__sub-nav-links flex flex-col p-1 capitalize">
+                    <li class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md">
+                      <a href="#">Wedding Planning</a>
+                    </li>
+                    <li class=" hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md">
+                      <a href="#">Design & Decoration</a>
+                    </li>
+                    <li class=" hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md">
+                      <a href="#">Venue Booking</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <div>
+                <a
+                  class="logo__img logo__img--before-scroll inline-block overflow-hidden mx-10"
+                  href=""
+                >
+                  <img src="./media/images/logo.png" alt="" />
+                </a>
+              </div>
+
+              <li class="nav__link px-5 py-4"><a href="#">gallery</a></li>
+              <li class="nav__link px-5 py-4"><a href="#">blog</a></li>
+              <li class="nav__link px-5 py-4 rounded-tr-lg rounded-br-lg overflow-hidden">
+                <a href="#">contact us</a>
+              </li>
+            </ul>
+          </div>
         </div>
+      </nav>
+      <div
+        class="absolute inset-0 -z-[10] h-full w-full bg-black overflow-hidden p-2"
+      >
+        <video
+          class="h-full rounded-lg"
+          muted
+          autoplay
+          loop
+          src="https://www.pexels.com/download/video/35542209/"
+        ></video>
+      </div>
     </div>
     <div class="h-[100vh] w-full bg-yellow-400"></div>
 
     <!-- script -->
-
-</body>
+     <script src="./script.js"></script>
+  </body>
 </html>
