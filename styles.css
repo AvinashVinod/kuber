@@ -68,7 +68,7 @@ video {
 /* ////////////////////////logo///////////////////////// */
 
 .logo__img {
-    transition: all 0.5s ease-in-out; /* This makes it smooth! */
+    transition: all 0.5s ease-in-out;
     display: inline-block;
 }
 

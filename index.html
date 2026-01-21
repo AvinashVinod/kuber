@@ -19,56 +19,155 @@
   </head>
   <body>
     <div class="relative h-[100vh] w-full">
-      <nav class="sticky inset-0 flex items-center">
+      <nav
+        class="fixed inset-x-0 top-0 z-[100] flex items-center justify-between px-6 py-0 lg:py-0"
+      >
+        <div class="lg:hidden">
+          <a href="#" class="relative z-0 w-[7rem] h-[7rem] block mt-[1.2rem] -ml-2">
+            <img
+              src="./media/images/logo.png"
+              alt="Logo"
+              class="object-contain w-full h-full"
+            />
+          </a>
+        </div>
+
         <div
-            id="navbar"
-            class="nav__container hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 lg:-top-2 w-full"
+          id="navbar"
+          class="nav__container hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 lg:-top-2 w-full transition-all duration-300"
         >
           <div class="relative flex flex-col items-center">
             <ul
-              class="flex items-center gap-5 font-light uppercase text-nowrap pt-2 text-white"
+              class="flex items-center gap-5 font-light uppercase text-nowrap pt-2 text-white transition-colors duration-300"
             >
               <li class="nav__link px-5 py-4"><a href="#">home</a></li>
               <li class="nav__link px-5 py-4"><a href="#">about</a></li>
 
               <li
-                class="services__nav-link group relative z-90 nav__link px-5 py-4 hover:bg-white hover:text-[#ca8a04] rounded-md"
+                class="services__nav-link group relative z-90 nav__link px-5 py-4 hover:bg-white hover:text-[#ca8a04] rounded-md transition-all"
               >
                 <a href="#">services</a>
-                <!-- support for hover glitch -->
-                <div class="absolute top-full left-0 h-20 w-full"></div>
+                <div class="absolute top-full left-0 h-10 w-full"></div>
                 <div
-                  class="nav__sub-nav absolute top-[105%] left-0 -z-0 w-[220px] bg-white text-black backdrop-blur-md rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible shadow-2xl"
+                  class="nav__sub-nav absolute top-[108%] left-0 -z-0 w-[220px] bg-white text-black backdrop-blur-md rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible shadow-2xl transition-all duration-300"
                 >
                   <ul class="nav__sub-nav-links flex flex-col p-1 capitalize">
-                    <li class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md">
+                    <li
+                      class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
+                    >
                       <a href="#">Wedding Planning</a>
                     </li>
-                    <li class=" hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md">
+                    <li
+                      class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
+                    >
                       <a href="#">Design & Decoration</a>
                     </li>
-                    <li class=" hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md">
+                    <li
+                      class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
+                    >
                       <a href="#">Venue Booking</a>
                     </li>
                   </ul>
                 </div>
               </li>
-              <div>
+
+              <li>
                 <a
-                  class="logo__img logo__img--before-scroll inline-block overflow-hidden mx-10"
-                  href=""
+                  class="logo__img logo__img--before-scroll inline-block overflow-hidden mx-10 mt-2"
+                  href="#"
                 >
-                  <img src="./media/images/logo.png" alt="" />
+                  <img src="./media/images/logo.png" alt="Logo" />
                 </a>
-              </div>
+              </li>
 
               <li class="nav__link px-5 py-4"><a href="#">gallery</a></li>
               <li class="nav__link px-5 py-4"><a href="#">blog</a></li>
-              <li class="nav__link px-5 py-4 rounded-tr-lg rounded-br-lg overflow-hidden">
+              <li
+                class="nav__link px-5 py-4 rounded-tr-lg rounded-br-lg overflow-hidden"
+              >
                 <a href="#">contact us</a>
               </li>
             </ul>
           </div>
+        </div>
+
+        <button
+          id="menu-btn"
+          class="lg:hidden flex flex-col justify-center items-center w-10 h-10 z-0 relative"
+        >
+          <span
+            class="w-8 h-1 bg-black transition-all duration-300 absolute transform"
+          ></span>
+          <span
+            class="w-8 h-1 bg-black transition-all duration-300 absolute"
+          ></span>
+          <span
+            class="w-8 h-1 bg-black transition-all duration-300 absolute transform"
+          ></span>
+        </button>
+
+        <div
+          id="mobile-menu"
+          class="fixed inset-0 -z-10 bg-white/95 pt-[8rem] pb-1 text-black -translate-y-full h-fit transition-transform duration-500 flex flex-col items-center justify-center lg:hidden"
+        >
+          <ul
+            class="flex flex-col items-center capitalize font-light w-full px-5 *:py-2 divide-y-2 divide-gray-200 *:w-full"
+          >
+            <li class="hover:text-[#ca8a04]">
+              <a href="#" class="mobile-link">home</a>
+            </li>
+            <li class="hover:text-[#ca8a04]">
+              <a href="#" class="mobile-link">about</a>
+            </li>
+            <li class="mobile-link-container hover:text-[#ca8a04]">
+              <div
+                class="flex justify-between items-center w-full group"
+                id="mobile-services-toggle"
+              >
+                <a href="#" class="mobile-link">services</a>
+                <!-- toggle arrow of services in mobile -->
+                <span
+                  class="transition-transform duration-300 h-5"
+                  id="services-arrow"
+                >
+                  <svg
+                    fill="#000000"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 -6 524 524"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>down</title>
+                    <path
+                      d="M64 191L98 157 262 320 426 157 460 191 262 387 64 191Z"
+                    />
+                  </svg>
+                </span>
+              </div>
+
+              <ul
+                id="mobile-sub-nav"
+                class="overflow-hidden max-h-0 transition-all duration-500 bg-gray-50/50 px-4"
+              >
+                <li class="py-2 border-b border-gray-100">
+                  <a href="#">Wedding Planning</a>
+                </li>
+                <li class="py-2 border-b border-gray-100">
+                  <a href="#">Design & Decoration</a>
+                </li>
+                <li class="py-2"><a href="#">Venue Booking</a></li>
+              </ul>
+            </li>
+            <li class="hover:text-[#ca8a04]">
+              <a href="#" class="mobile-link">gallery</a>
+            </li>
+            <li class="hover:text-[#ca8a04]">
+              <a href="#" class="mobile-link">blog</a>
+            </li>
+            <li class="hover:text-[#ca8a04]">
+              <a href="#" class="mobile-link">contact us</a>
+            </li>
+          </ul>
         </div>
       </nav>
       <div
@@ -86,6 +185,6 @@
     <div class="h-[100vh] w-full bg-yellow-400"></div>
 
     <!-- script -->
-     <script src="./script.js"></script>
+    <script src="./script.js"></script>
   </body>
 </html>
