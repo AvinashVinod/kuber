@@ -1,0 +1,68 @@
+:root {
+    --primary-padding: 16px;
+    --secondary-padding: 8px;
+}
+
+/* ///////////////////////resets/////////////////////////// */
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+img,
+video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* //////////////////////////////logo///////////////////////////// */
+
+/* Breathing Animation */
+/* .logo-animate {
+    animation: breathe 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 1));
+    transform: scale(1);
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 1));
+    }
+    50% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+    }
+} */
+
+/* ///////////////////////navbar/////////////////////////// */
+
