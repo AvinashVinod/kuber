@@ -65,9 +65,11 @@ servicesToggle.addEventListener('click', (e) => {
     
     if (isOpen) {
         mobileSubNav.style.maxHeight = "0px";
+        mobileSubNav.style.opacity = "0";
         servicesArrow.style.transform = "rotate(0deg)";
     } else {
         mobileSubNav.style.maxHeight = mobileSubNav.scrollHeight + "px";
+        mobileSubNav.style.opacity = "1";
         servicesArrow.style.transform = "rotate(180deg)";
     }
 });
