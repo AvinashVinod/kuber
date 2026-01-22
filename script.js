@@ -36,24 +36,28 @@ window.onscroll = function() {
     }
 };
 
-spans[0].style.transform = "translateY(-10px)";
-spans[2].style.transform = "translateY(10px)";
+spans[0].style.transform = "translateY(-8px)";
+spans[2].style.transform = "translateY(8px)";
 
 menuBtn.addEventListener('click', () => {
     mobileMenu.classList.toggle('translate-y-0');
     
-    const isOpen = !mobileMenu.classList.contains('translate-y-0');
+    const isMenuOpening = mobileMenu.classList.contains('translate-y-0');
 
-    if (!isOpen) {
-        // Create the Perfect X
+    if (isMenuOpening) {
+        // Perfect Close
         spans[0].style.transform = "translateY(0) rotate(45deg)";
         spans[1].style.opacity = "0";
         spans[2].style.transform = "translateY(0) rotate(-45deg)";
     } else {
-        // Revert to Hamburger
-        spans[0].style.transform = "translateY(-10px) rotate(0deg)";
+        // Perfect Hamburger
+        spans[0].style.transform = "translateY(-10px) rotate(0deg) translateY(2px)";
         spans[1].style.opacity = "1";
-        spans[2].style.transform = "translateY(10px) rotate(0deg)";
+        spans[2].style.transform = "translateY(10px) rotate(0deg) translateY(-2px)";
+
+        mobileSubNav.style.maxHeight = "0px";
+        mobileSubNav.style.opacity = "0";
+        servicesArrow.style.transform = "rotate(0deg)";
     }
 });
 
