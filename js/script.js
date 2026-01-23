@@ -1,5 +1,5 @@
 function loadNavbar() {
-    fetch('navbar.html') 
+    fetch('../html/navbar.html') 
         .then(response => {
             if (!response.ok) throw new Error('Navbar file not found');
             return response.text();
@@ -46,9 +46,6 @@ const cards = document.querySelectorAll('.testimonial-card');
             subNavLinks.forEach(link => link.classList.add("hover:bg-black", "hover:text-white"));
             servicesNavLink.classList.add("hover:bg-black", "hover:text-white");
             logo.classList.replace("logo__img--before-scroll", "logo__img--after-scroll");
-            
-            // Hamburger color
-            spans.forEach(s => s.classList.replace('bg-white', 'bg-black'));
         } else {
             navbar.classList.remove('bg-white', 'shadow-lg', 'px-4');
             navList.classList.replace('text-black', 'text-white');
@@ -57,9 +54,6 @@ const cards = document.querySelectorAll('.testimonial-card');
             subNavLinks.forEach(link => link.classList.remove("hover:bg-black", "hover:text-white"));
             servicesNavLink.classList.remove("hover:bg-black", "hover:text-white");
             logo.classList.replace("logo__img--after-scroll", "logo__img--before-scroll");
-            
-            // Hamburger color back
-            spans.forEach(s => s.classList.replace('bg-black', 'bg-white'));
         }
     };
 
