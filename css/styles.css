@@ -21,6 +21,8 @@ body {
     scrollbar-width: none;
     font-family: "Poppins", sans-serif;
     user-select: none;
+    -webkit-font-smoothing: antialiased;
+
 }
 
 body::-webkit-scrollbar {
@@ -212,6 +214,22 @@ footer .bg-gradient-to-r {
     opacity: 1;
     transform: translateY(0);
   }
+
+@keyframes hero-zoom {
+    from { transform: scale(1.3); }
+    to { transform: scale(1); }
+}
+
+@keyframes slide-up {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* ////////////////////media-queries/////////////////////// */
 
 @media (min-width: 1024px) {

@@ -23,36 +23,41 @@
   </head>
   <body>
     <div id="nav-placeholder"></div>
-    <div class="relative z-0 h-[72vw] lg:h-[100vh] w-full">
-      <!-- hero banner -->
-      <div
-        class="absolute top-[5rem] lg:inset-0 -z-[10] h-[72vw] lg:h-full w-full bg-black overflow-hidden p-2"
-      >
-        <!-- hero banner content -->
-        <div class="absolute z-10 inset-0 h-full w-full bg-black/40 text-white">
-          <div
-            class="relative z-11 flex flex-col items-center justify-center h-full w-full"
-          >
-            <h1 class="bg-black/40 px-7 py-2 heading">crafting love stories</h1>
-            <p class="text-[1.1rem] pt-1 pb-3">
-              Begin yours with the Wedding Vogue
-            </p>
-            <button class="text-black rounded-md bg-white px-5 py-2">
-              Let's plan now
-            </button>
+    <div class="relative h-screen w-full overflow-hidden bg-stone-950">
+    
+    <div class="absolute inset-0 z-0">
+        <video
+            class="h-full w-full object-cover scale-125 animate-[hero-zoom_2s_ease-out_forwards] brightness-[0.7]"
+            muted autoplay loop playsinline
+            src=".././media/videos/IMG_3585-1.mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
+    </div>
+
+    <div class="relative flex items-center justify-center z-10 h-full w-full px-6 text-center">
+        <div class="flex h-fit w-fit flex-col items-center justify-center mt-20">
+          <h1 class="max-w-5xl text-5xl md:text-8xl lg:text-9xl capitalize leading-[0.9] text-white animate-[slide-up_1.2s_ease-out_0.7s_both]">
+              Crafting <span class="italic font-light">Love</span> <br/>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-300 to-stone-500">Stories.</span>
+          </h1>
+          <p class="mt-8 max-w-lg text-lg md:text-xl font-light text-stone-300 animate-[fade-in_1.5s_ease-out_1.2s_both]">
+              <span class="text-white">The Wedding Vogue</span>.
+          </p>
+          <div class="mt-12 animate-[fade-in_1.5s_ease-out_1.5s_both]">
+              <a href="#contact" class="group relative inline-flex items-center overflow-hidden border border-white/30 bg-white/10 px-12 py-5 backdrop-blur-md transition-all hover:bg-white hover:text-black rounded-full">
+                  <span class="relative z-10 text-sm font-bold uppercase tracking-widest">Reserve Your Date</span>
+                  <div class="absolute inset-0 -z-0 bg-gradient-to-r from-[#F68FA2] to-[#fbc2eb] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+              </a>
+              <p class="mt-4 text-[10px] uppercase tracking-[0.2em] text-stone-400">Limited availability for 2024-25</p>
           </div>
         </div>
-        <video
-          class="h-full rounded-lg scale-110"
-          muted
-          autoplay
-          loop
-          playsinline
-          webkit-playsinline
-          src=".././media/videos/IMG_3585-1.mp4"
-        ></video>
-      </div>
     </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+        <div class="w-[1px] h-16 bg-gradient-to-b from-white to-transparent"></div>
+    </div>
+</div>
+
     <!-- about us -->
     <section class="mt-[5.1rem] lg:mt-0 relative overflow-hidden">
       <div class="relative z-0 h-fit w-full lg:p-6">
