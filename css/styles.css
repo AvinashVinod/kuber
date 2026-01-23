@@ -170,6 +170,23 @@ h2,
     transform-origin: left;
 }
 
+/* Add smooth hover animations */
+footer a, footer button {
+    transition: all 0.3s ease;
+}
+
+/* Custom gradient animation for the top border */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+footer .bg-gradient-to-r {
+    background-size: 200% 200%;
+    animation: gradientShift 5s ease infinite;
+}
+
 /* ////////////////////media-queries/////////////////////// */
 
 @media (min-width: 1024px) {
@@ -183,7 +200,7 @@ h2,
 
     h1,
     .h1 {
-        font-size: 4vw;
+        font-size: 4vw !important;
         letter-spacing: 1.5px;
     }
 

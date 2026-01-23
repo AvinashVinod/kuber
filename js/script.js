@@ -1,16 +1,64 @@
-function loadNavbar() {
-    fetch('../html/navbar.html') 
-        .then(response => {
-            if (!response.ok) throw new Error('Navbar file not found');
-            return response.text();
+function loadComponentsParallel() {
+    const components = [
+        { id: 'nav-placeholder', url: '../html/navbar.html' },
+        { id: 'footer-placeholder', url: '../html/footer.html' },
+        { id: 'contact-placeholder', url: '../html/contact.html' }
+    ];
+
+    // Create promises for all components
+    const promises = components.map(component => {
+        return fetch(component.url)
+            .then(response => {
+                if (!response.ok) throw new Error(`Failed to load ${component.url}`);
+                return response.text();
+            })
+            .then(html => {
+                const placeholder = document.getElementById(component.id);
+                if (placeholder) {
+                    placeholder.innerHTML = html;
+                }
+            })
+            .catch(error => {
+                console.error(`Error loading ${component.url}:`, error);
+            });
+    });
+
+    // When all components are loaded
+    Promise.all(promises)
+        .then(() => {
+            console.log('All components loaded');
+            
+            // Initialize navbar scripts
+            if (typeof initializeNavScripts === 'function') {
+                initializeNavScripts();
+            }
+            
+            // Load contact JS files
+            loadContactJavaScript();
         })
-        .then(data => {
-            document.getElementById('nav-placeholder').innerHTML = data;
-            initializeNavScripts();
-        })
-        .catch(err => console.error('Error loading navbar:', err));
+        .catch(error => {
+            console.error('Error loading components:', error);
+        });
 }
 
+// Function to load contact-related JavaScript files
+function loadContactJavaScript() {
+    const scripts = [
+        '../js/contact-form.js',
+        '../js/validation.js',
+        '../js/form-submission.js'
+    ];
+
+    scripts.forEach(scriptSrc => {
+        const script = document.createElement('script');
+        script.src = scriptSrc;
+        script.defer = true;
+        document.head.appendChild(script);
+    });
+}
+
+// Start loading when DOM is ready
+document.addEventListener('DOMContentLoaded', loadComponentsParallel);
 function initializeNavScripts() {
     // 1. Select all elements (These now exist in the DOM)
     const navbar = document.getElementById('navbar');
