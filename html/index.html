@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind in Plain HTML</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Enable plugins for custom values -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="nav-placeholder"></div>
+    <div class="relative z-0 h-[72vw] lg:h-[100vh] w-full">
+     <!-- hero banner -->
+      <div
+        class="absolute top-[5rem] lg:inset-0 -z-[10] h-[72vw] bg-red-300 lg:h-full w-full bg-black overflow-hidden p-2"
+      >
+        <!-- hero banner content -->
+        <div class="absolute z-10 inset-0 h-full w-full bg-black/40 text-white">
+          <div class="relative z-11 flex flex-col items-center justify-center h-full w-full">
+            <h1 class="bg-black/40 px-7 py-2">crafting love stories</h1>
+            <p class="text-[1.1rem] pt-1 pb-3">Begin yours with the Wedding Vogue</p>
+            <button class="text-black rounded-md bg-white px-5 py-2">Let's plan now</button>
+          </div>
+        </div>
+        <video
+          class="h-full rounded-lg scale-110"
+          muted
+          autoplay
+          loop
+          playsinline
+          webkit-playsinline
+          src=".././media/videos/IMG_3585-1.mp4"
+        ></video>
+      </div>
+    </div>
+    <!-- about us -->
+    <section class="mt-[5.1rem] lg:mt-0">
+      <div class="relative z-0 h-fit w-full lg:p-6">
+        <!-- floral background -->
+        <div class="absolute inset-0 -z-10 h-full w-full">
+          <img class="opacity-[0.5]" src="../media/images/floral.jpg" alt="">
+        </div>
+        <div class="maximum-width grid gap-10 grid-cols-1 lg:grid-cols-2 ">
+          <div class="h-[35vh] sm:h-full w-full overflow-hidden">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+          </div>
+          <div class="w-[90%] pb-10">
+            <h1 class="h1">about us</h1>
+            <div class="space-y-3 text-gray-800">
+              <p>
+                The Wedding Vogue (TWV) is a wedding planning and decoration company committed to turning dreams into breathtaking realities.
+              </p>
+              <p>
+                Crafting unforgettable experiences, TWV specializes in curating bespoke weddings that reflect each couple’s unique style and personality. From intimate gatherings to grand celebrations, their team of seasoned professionals meticulously orchestrates every detail to make a memorable event.
+              </p>
+              <p>
+                With expertise in venue selection, decor, catering, entertainment, and seamless execution, TWV ensures that every aspect of the celebration is thoughtfully planned and flawlessly executed.
+              </p>
+              <p>
+                At The Wedding Vogue, every wedding is more than just an event—it’s a masterpiece of love and celebration, meticulously crafted to leave a lasting impression.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--  wedding story -->
+    <section>
+      <div class="flex flex-col items-center">
+        <h1 class="h1 w-fit mb-2 lg:mb-2">wedding that tell story</h1>
+        <div class="maximum-width grid lg:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full *:h-[60vh] *:bg-black">
+          <div class="relative z-0 flex items-end">
+            <div class="absolute -z-10 inset-0 h-full w-full">
+              <img loading="lazy" src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+              <div class="flex flex-col items-center justify-center bg-black/50 text-white w-full pt-2 pb-3">
+                <h2>Lorem, ipsum.</h2>
+                <p>Lorem ipsum dolor sit.</p>
+              </div>
+          </div>
+          <div class="relative z-0 flex items-end">
+            <div class="absolute -z-10 inset-0 h-full w-full">
+              <img loading="lazy" src="https://images.unsplash.com/photo-1718679515111-78218fcbdb95?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+              <div class="flex flex-col items-center justify-center bg-black/50 text-white w-full pt-2 pb-3">
+                <h2>Lorem, ipsum.</h2>
+                <p>Lorem ipsum dolor sit.</p>
+              </div>
+          </div>
+          <div class="relative z-0 flex items-end">
+            <div class="absolute -z-10 inset-0 h-full w-full">
+              <img loading="lazy" src="https://images.unsplash.com/photo-1718679515111-78218fcbdb95?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+              <div class="flex flex-col items-center justify-center bg-black/50 text-white w-full pt-2 pb-3">
+                <h2>Lorem, ipsum.</h2>
+                <p>Lorem ipsum dolor sit.</p>
+              </div>
+          </div>
+          <div class="relative z-0 flex items-end">
+            <div class="absolute -z-10 inset-0 h-full w-full">
+              <img loading="lazy" src="https://images.unsplash.com/photo-1705288839831-138613026096?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+              <div class="flex flex-col items-center justify-center bg-black/50 text-white w-full pt-2 pb-3">
+                <h2>Lorem, ipsum.</h2>
+                <p>Lorem ipsum dolor sit.</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- services -->
+    <section class="section--no-padding">
+    <div class="mt-[4rem]">
+      <h1 class="h1 w-[80%] mx-auto text-center leading-none pb-7">Every celebration is meticulously planned and passionately executed by us</h1>
+      <div class="grid lg:grid-cols-5 text-white *:cursor-pointer">
+        <div class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden">
+          <div class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"></div>
+          <div class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"><img src="https://images.unsplash.com/photo-1544592732-83bbbfc46783?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+          <h2 class="group-hover:border-2 border-white py-2 px-3">wedding planning</h2>
+        </div>
+        <div class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden">
+          <div class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"></div>
+          <div class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"><img src="https://images.unsplash.com/photo-1544592732-83bbbfc46783?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+          <h2 class="group-hover:border-2 border-white py-2 px-3">design & decoration</h2>
+        </div>
+        <div class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden">
+          <div class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"></div>
+          <div class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"><img src="https://images.unsplash.com/photo-1544592732-83bbbfc46783?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+          <h2 class="group-hover:border-2 border-white py-2 px-3">destination & venues</h2>
+        </div>
+        <div class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden">
+          <div class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"></div>
+          <div class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"><img src="https://images.unsplash.com/photo-1544592732-83bbbfc46783?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+          <h2 class="group-hover:border-2 border-white py-2 px-3">entertainment</h2>
+        </div>
+        <div class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden">
+          <div class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"></div>
+          <div class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"><img src="https://images.unsplash.com/photo-1544592732-83bbbfc46783?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""></div>
+          <h2 class="group-hover:border-2 border-white py-2 px-3">other services</h2>
+        </div>
+      </div>
+    </div>
+    </section>
+    <!-- testimonials -->
+    <section class="bg-[#F9F5F6] py-12 lg:py-20">
+  <div class="maximum-width">
+    <h1 class="h1 text-center mb-5">Client Testimonials</h1>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <div class="testimonial-card group relative aspect-[9/16] w-full overflow-hidden cursor-pointer rounded-sm shadow-md" data-video-id="F4dzcwT4h20">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Testimonial 1">
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-20 h-20 lg:w-18 lg:h-18 border-2 border-white rounded-full flex items-center justify-center bg-white/10 backdrop-blur-[2px] transition-transform duration-300">
+            <svg class="w-8 h-8 lg:w-10 lg:h-10 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card group relative aspect-[9/16] w-full overflow-hidden cursor-pointer rounded-sm shadow-md" data-video-id="F4dzcwT4h20">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Testimonial 2">
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-20 h-20 lg:w-18 lg:h-18 border-2 border-white rounded-full flex items-center justify-center bg-white/10 backdrop-blur-[2px] transition-transform duration-300">
+            <svg class="w-8 h-8 lg:w-10 lg:h-10 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card group relative aspect-[9/16] w-full overflow-hidden cursor-pointer rounded-sm shadow-md" data-video-id="F4dzcwT4h20">
+        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Testimonial 3">
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-20 h-20 lg:w-18 lg:h-18 border-2 border-white rounded-full flex items-center justify-center bg-white/10 backdrop-blur-[2px] transition-transform duration-300">
+            <svg class="w-8 h-8 lg:w-10 lg:h-10 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card group relative aspect-[9/16] w-full overflow-hidden cursor-pointer rounded-sm shadow-md" data-video-id="F4dzcwT4h20">
+        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Testimonial 4">
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-20 h-20 lg:w-18 lg:h-18 border-2 border-white rounded-full flex items-center justify-center bg-white/10 backdrop-blur-[2px] transition-transform duration-300">
+            <svg class="w-8 h-8 lg:w-10 lg:h-10 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    <div id="video-modal" class="fixed inset-0 z-[500] hidden items-center justify-center bg-black/95 p-4 transition-opacity duration-300 opacity-0">
+        <svg id="close-modal" class="absolute top-6 right-6 text-white text-5xl hover:scale-110 transition-transform" width="25px" height="25px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path fill="#fff" d="M15.1 3.1l-2.2-2.2-4.9 5-4.9-5-2.2 2.2 5 4.9-5 4.9 2.2 2.2 4.9-5 4.9 5 2.2-2.2-5-4.9z"></path>
+</svg>
+        <div class="relative w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
+    <iframe 
+        id="modal-iframe" 
+        class="absolute inset-0 w-full h-full" 
+        src="" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen>
+    </iframe>
+</div>
+    </div>
+    <!-- script -->
+    <script src="../js/script.js"></script>
+  </body>
+</html>

@@ -17,8 +17,14 @@ html,
 body {
     height: 100%;
     width: 100%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     font-family: "Poppins", sans-serif;
     user-select: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 li {
@@ -35,7 +41,8 @@ button {
     background: none;
     cursor: pointer;
     font-family: inherit;
-    font-weight: bold;
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 img,
@@ -44,6 +51,52 @@ video {
     width: 100%;
     object-fit: cover;
 }
+
+/* styles used on entire page */
+
+section {
+    margin: 0 auto;
+    max-width: 1500px;
+    padding: 1rem;
+}
+
+.section--no-padding {
+    padding: 0;
+}
+
+.maximum-width {
+    margin: 0 auto;
+    max-width: 1240px;
+}
+
+/* ////////////////////////////typeography///////////////////////////// */
+
+h1,
+.h1,
+h2,
+.h2 {
+    font-family: "Dancing Script", cursive;
+    text-transform: capitalize;
+    font-weight: 100;
+}
+
+h1,
+.h1 {
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+}
+
+.h1 {
+    color: #F68FA2;
+}
+
+h2,
+.h2 {
+    font-size: 1.5rem;
+    letter-spacing: 1.2px;
+}
+
+
 
 /* //////////////////////////////logo///////////////////////////// */
 
@@ -115,4 +168,28 @@ video {
 .nav__link:not(:nth-child(3)):hover::after {
     transform: scaleX(1);
     transform-origin: left;
+}
+
+/* ////////////////////media-queries/////////////////////// */
+
+@media (min-width: 1024px) {
+    section {
+        padding: 2rem 2rem 0;
+    }
+
+    .section--no-padding {
+        padding: 0 2rem;
+    }
+
+    h1,
+    .h1 {
+        font-size: 4vw;
+        letter-spacing: 1.5px;
+    }
+
+    h2,
+    .h2 {
+        font-size: 1.6vw;
+        letter-spacing: 1.2px;
+    }
 }
