@@ -188,6 +188,30 @@ footer .bg-gradient-to-r {
     animation: gradientShift 5s ease infinite;
 }
 
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+  }
+
+  /* The active state (when in view) */
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Optional: Extra stagger delays for children */
+  .stagger-children > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-out;
+  }
+
+  .stagger-children.active > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
 /* ////////////////////media-queries/////////////////////// */
 
 @media (min-width: 1024px) {
