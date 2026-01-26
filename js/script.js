@@ -198,36 +198,36 @@ function initializeNavScripts() {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize AOS (Animate on Scroll)
-AOS.init({
-  duration: 800, // Animation duration in ms
-  easing: 'ease-out', // Default easing
-  once: true, // Whether animation should happen only once
-  offset: 100, // Offset (in px) from the original trigger point
-  delay: 0, // Delay between animations
-});
-var storySwiper = new Swiper('.story-swiper', {
-        loop: true,
-        speed: 800,
-        autoplay: {
-            delay: 4000,
-            disableOnInteraction: false,
-        },
-        effect: 'coverflow',
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        coverflowEffect: {
-            rotate: 5,        // Slight rotation for elegance
-            stretch: 0,        // Space between slides
-            depth: 100,       // Perspective depth
-            modifier: 2,       // Effect multiplier
-            slideShadows: false,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
+  AOS.init({
+    duration: 800, // Animation duration in ms
+    easing: "ease-out", // Default easing
+    once: false, // Whether animation should happen only once
+    offset: 100, // Offset (in px) from the original trigger point
+    delay: 0, // Delay between animations
+  });
+  var storySwiper = new Swiper(".story-swiper", {
+    loop: true,
+    speed: 800,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+      rotate: 5, // Slight rotation for elegance
+      stretch: 0, // Space between slides
+      depth: 100, // Perspective depth
+      modifier: 2, // Effect multiplier
+      slideShadows: false,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
 });
 
 loadNavbar();
