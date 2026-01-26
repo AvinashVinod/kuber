@@ -22,7 +22,6 @@ body {
   font-family: "Poppins", sans-serif;
   user-select: none;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {
