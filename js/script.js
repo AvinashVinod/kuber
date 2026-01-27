@@ -1,8 +1,26 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const logo = document.querySelector('img[src*="logo"]');
+  if (logo) {
+    console.log('Logo src in navbar:', logo.src);
+    console.log('Current page URL:', window.location.href);
+    console.log('Expected full path:', new URL(logo.src, window.location.href).href);
+    
+    // Test if image loads
+    const testImg = new Image();
+    testImg.onload = () => console.log('Logo loads successfully');
+    testImg.onerror = () => console.error('Logo fails to load');
+    testImg.src = logo.src;
+  }
+});
+
 function loadComponentsParallel() {
+  // Get current page URL to determine correct paths
+  const basePath = window.location.pathname.includes('/kuber/') ? './' : '../';
+  
   const components = [
-    { id: "nav-placeholder", url: "../html/navbar.html" },
-    { id: "footer-placeholder", url: "../html/footer.html" },
-    { id: "contact-placeholder", url: "../html/contact.html" },
+    { id: "nav-placeholder", url: `${basePath}html/navbar.html` },
+    { id: "footer-placeholder", url: `${basePath}html/footer.html` },
+    { id: "contact-placeholder", url: `${basePath}html/contact.html` },
   ];
 
   // Create promises for all components
@@ -199,11 +217,11 @@ function initializeNavScripts() {
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize AOS (Animate on Scroll)
   AOS.init({
-    duration: 800, // Animation duration in ms
-    easing: "ease-out", // Default easing
-    once: false, // Whether animation should happen only once
+    duration: 800,
+    easing: "ease-out",
+    once: false,
     offset: 100, // Offset (in px) from the original trigger point
-    delay: 0, // Delay between animations
+    delay: 0,
   });
   var storySwiper = new Swiper(".story-swiper", {
     loop: true,
