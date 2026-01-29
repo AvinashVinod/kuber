@@ -1,6 +1,7 @@
 /* optimized.css - Performance Optimized Styles */
 
 /* ====== CRITICAL PERFORMANCE FIXES ====== */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -42,8 +43,9 @@ html {
 
 /* ====== IMAGE & VIDEO OPTIMIZATION ====== */
 img, video {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 

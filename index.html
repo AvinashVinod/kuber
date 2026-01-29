@@ -10,8 +10,8 @@
     <!-- aos -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Enable plugins for custom values -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
-    <link rel="stylesheet" href="../kuber/css/styles.css" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <link rel="stylesheet" href="/kuber/css/styles.css" />
     <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,14 +26,18 @@
   </head>
   <body>
     <div id="nav-placeholder"></div>
-    <div class="main relative z-10 bg-white lg:mb-[80vh]">
+    <main id="main-content" class="main relative z-10 bg-white lg:mb-[80vh]">
+      <!-- Dynamic page content will be loaded here -->
+      <div id="page-content">
+        <!-- Home page content -->
+        <div id="home-page">
       <div class="relative h-screen w-full overflow-hidden bg-stone-950">
       
       <div class="absolute inset-0 z-0">
           <video
               class="h-full w-full object-cover scale-125 animate-[hero-zoom_2s_ease-out_forwards] brightness-[0.7]"
               muted autoplay loop playsinline
-              src="../kuber/media/videos/IMG_3585-1.mp4">
+              src="/kuber/media/videos/IMG_3585-1.mp4">
           </video>
           <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
       </div>
@@ -60,7 +64,7 @@
       </div>
       </div>
       <!-- about us -->
-      <section class="mt-10 lg:mt-[5.1rem] lg:mt-0 relative overflow-hidden" data-aos="fade-up">
+      <section class="mt-10 lg:mt-[5.1rem] lg:mt-0 relative overflow-hidden">
         <div class="relative z-0 h-fit w-full lg:p-6">
           <div class="absolute inset-0 -z-10">
             <img
@@ -89,7 +93,7 @@
                 </p>
                 <p>
                   Crafting unforgettable experiences, TWV specializes in curating
-                  bespoke weddings that reflect each couple’s unique style and
+                  bespoke weddings that reflect each couple's unique style and
                   personality. From intimate gatherings to grand celebrations,
                   their team of seasoned professionals meticulously orchestrates
                   every detail to make a memorable event.
@@ -102,7 +106,7 @@
                 </p>
                 <p>
                   At The Wedding Vogue, every wedding is more than just an
-                  event—it’s a masterpiece of love and celebration, meticulously
+                  event—it's a masterpiece of love and celebration, meticulously
                   crafted to leave a lasting impression.
                 </p>
               </div>
@@ -269,114 +273,6 @@
           </div>
         </div>
       </div>
-        </div>
-      </section>
-      <!-- celebration -->
-      <section class="section--no-padding overflow-hidden">
-        <div class="mt-10 lg:mt-[4rem]">
-          <h1
-            class="h1 lg:w-[80%] mx-auto lg:text-center leading-none pl-5 lg:pl-0 mb-6 lg:mb-9"
-          >
-            Every celebration is meticulously planned and passionately executed by
-            us
-          </h1>
-          <div class="grid lg:grid-cols-5 text-white *:cursor-pointer">
-            <div
-              data-aos="fade-left" data-aos-delay="200"
-              class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden"
-            >
-              <div
-                class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"
-              ></div>
-              <div
-                class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"
-              >
-                <img
-                  src="./media/images/wedding.avif"
-                  alt=""
-                />
-              </div>
-              <h2 class="h2 group-hover:border-2 border-white py-2 px-3">
-                wedding planning
-              </h2>
-            </div>
-            <div
-              data-aos="fade-left" data-aos-delay="300"
-              class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden"
-            >
-              <div
-                class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"
-              ></div>
-              <div
-                class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"
-              >
-                <img
-                  src="./media/images/wedding.avif"
-                  alt=""
-                />
-              </div>
-              <h2 class="h2 group-hover:border-2 border-white py-2 px-3">
-                design & decoration
-              </h2>
-            </div>
-            <div
-              data-aos="fade-left" data-aos-delay="400"
-              class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden"
-            >
-              <div
-                class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"
-              ></div>
-              <div
-                class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"
-              >
-                <img
-                  src="./media/images/wedding.avif"
-                  alt=""
-                />
-              </div>
-              <h2 class="h2 group-hover:border-2 border-white py-2 px-3">
-                destination & venues
-              </h2>
-            </div>
-            <div
-              data-aos="fade-left" data-aos-delay="500"
-              class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden"
-            >
-              <div
-                class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"
-              ></div>
-              <div
-                class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"
-              >
-                <img
-                  src="./media/images/wedding.avif"
-                  alt=""
-                />
-              </div>
-              <h2 class="h2 group-hover:border-2 border-white py-2 px-3">
-                entertainment
-              </h2>
-            </div>
-            <div
-              data-aos="fade-left" data-aos-delay="600"
-              class="group relative z-0 h-[20vh] lg:h-[50vh] flex items-center justify-center overflow-hidden"
-            >
-              <div
-                class="absolute -z-10 bg-black/50 h-full w-full group-hover:opacity-0"
-              ></div>
-              <div
-                class="absolute -z-[11] h-full w-full group-hover:scale-[1.2] transition-scale duration-300"
-              >
-                <img
-                  src="./media/images/wedding.avif"
-                  alt=""
-                />
-              </div>
-              <h2 class="h2 group-hover:border-2 border-white py-2 px-3">
-                other services
-              </h2>
-            </div>
-          </div>
         </div>
       </section>
       <!-- testimonials -->
@@ -651,8 +547,10 @@
       </section>
       <!-- contact form -->
       <div id="contact-placeholder"></div>
+        </div>
+      </div>
       <!-- footer -->
-    </div>
+    </main>
     <div id="footer-placeholder"></div>
     <!-- script -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

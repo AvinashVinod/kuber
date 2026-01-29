@@ -51,32 +51,70 @@ function loadComponentsParallel() {
         initializeNavScripts();
       }
 
-      // Load contact JS files
-      loadContactJavaScript();
+      // Check for hash on initial load
+      checkHashAndLoadPage();
     })
     .catch((error) => {
       console.error("Error loading components:", error);
     });
 }
 
-// Function to load contact-related JavaScript files
-function loadContactJavaScript() {
-  const scripts = [
-    "../js/contact-form.js",
-    "../js/validation.js",
-    "../js/form-submission.js",
-  ];
-
-  scripts.forEach((scriptSrc) => {
-    const script = document.createElement("script");
-    script.src = scriptSrc;
-    script.defer = true;
-    document.head.appendChild(script);
-  });
-}
-
 // Start loading when DOM is ready
 document.addEventListener("DOMContentLoaded", loadComponentsParallel);
+
+// Check hash and load appropriate page
+function checkHashAndLoadPage() {
+  const hash = window.location.hash;
+  
+  // If no hash but we have a stored page (from before reload), restore it
+  if ((!hash || hash === '#') && localStorage.getItem('currentPage')) {
+    const storedPage = localStorage.getItem('currentPage');
+    const storedHash = localStorage.getItem('currentHash');
+    
+    console.log('Restoring page after reload:', storedPage, storedHash);
+    
+    // Restore hash
+    if (storedHash) {
+      window.location.hash = storedHash;
+    }
+    
+    // Load the stored page
+    loadPage(storedPage, false);
+    return;
+  }
+  
+  if (hash && hash !== '#') {
+    // Map hash to page files
+    const pageMap = {
+      '#services': '/kuber/html/services.html',
+      '#wedding': '/kuber/html/services.html',
+      '#event-management': '/kuber/html/services.html',
+      '#decor': '/kuber/html/services.html',
+      '#corporate': '/kuber/html/services.html',
+      '#about': '#about-section',
+      '#gallery': '#gallery-section',
+      '#blog': '#blog-section',
+      '#contact': '#contact'
+    };
+
+    const targetPage = pageMap[hash];
+    if (targetPage && targetPage.includes('.html')) {
+      // Load page
+      loadPage(targetPage, false);
+    } else if (targetPage) {
+      // Scroll to section
+      const section = document.querySelector(targetPage);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  } else {
+    // Clear stored page if we're on home
+    localStorage.removeItem('currentPage');
+    localStorage.removeItem('currentHash');
+  }
+}
+
 function initializeNavScripts() {
   // 1. Select all elements (These now exist in the DOM)
   const navbar = document.getElementById("navbar");
@@ -97,6 +135,9 @@ function initializeNavScripts() {
   const modalIframe = document.getElementById("modal-iframe");
   const closeModal = document.getElementById("close-modal");
   const cards = document.querySelectorAll(".testimonial-card");
+
+  const ajaxLinks = document.querySelectorAll('.ajax-link');
+  const pageContent = document.getElementById('page-content');
 
   // 2. Initial Burger State
   spans[0].style.transform = "translateY(-8px)";
@@ -169,22 +210,23 @@ function initializeNavScripts() {
     }
   });
 
+  // Video Modal Functionality
   cards.forEach((card) => {
     card.addEventListener("click", () => {
       const videoId = card.getAttribute("data-video-id");
-      // Set the YouTube URL with Autoplay
-      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      const currentOrigin = window.location.origin;
 
-      // Show Modal
+      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+
       modal.classList.remove("hidden");
       modal.classList.add("flex");
       setTimeout(() => modal.classList.add("opacity-100"), 10);
-      document.body.style.overflow = "hidden"; // Stop background scroll
+      document.body.style.overflow = "hidden";
     });
   });
 
   const closeFunction = () => {
-    modal.classList.remove("opacity-100");
+    modal.classList.remove("opacity-0");
     setTimeout(() => {
       modal.classList.add("hidden");
       modal.classList.remove("flex");
@@ -198,20 +240,188 @@ function initializeNavScripts() {
     if (e.target === modal) closeFunction();
   });
 
-  cards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const videoId = card.getAttribute("data-video-id");
+  // AJAX Navigation with hash-based routing (prevents 404 errors)
+  // This handles ALL ajax-link clicks including subnav items
+  ajaxLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default # behavior
+      
+      const targetPage = this.getAttribute('data-target');
+      const pageName = this.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+      
+      console.log('Ajax link clicked:', pageName, targetPage);
+      
+      // Update hash (this won't cause 404 errors on refresh)
+      window.location.hash = pageName;
+      
+      // Load the page
+      loadPage(targetPage, true);
 
-      const currentOrigin = window.location.origin;
-
-      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
-
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-      setTimeout(() => modal.classList.add("opacity-100"), 10);
-      document.body.style.overflow = "hidden";
+      // Close mobile menu if open
+      if (mobileMenu && mobileMenu.classList.contains("translate-y-0")) {
+        menuBtn.click();
+      }
     });
   });
+
+  // Handle ONLY logo clicks for home - NOT regular # links
+  const logoLinks = document.querySelectorAll('.logo__img');
+  logoLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Logo clicked - going home');
+      
+      // Clear stored page
+      localStorage.removeItem('currentPage');
+      localStorage.removeItem('currentHash');
+      
+      // Clear hash and reload
+      window.location.hash = '';
+      location.reload();
+    });
+  });
+
+  // Handle specific home link clicks (not ajax-links with #)
+  const homeLink = document.querySelector('a[href="/kuber/"]');
+  if (homeLink) {
+    homeLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Home link clicked');
+      
+      // Clear stored page
+      localStorage.removeItem('currentPage');
+      localStorage.removeItem('currentHash');
+      
+      // Clear hash and reload
+      window.location.hash = '';
+      location.reload();
+    });
+  }
+
+  // Handle hash changes (back/forward button)
+  window.addEventListener('hashchange', function() {
+    const hash = window.location.hash;
+    console.log('Hash changed to:', hash);
+    
+    if (!hash || hash === '#') {
+      // Going back to home
+      localStorage.removeItem('currentPage');
+      localStorage.removeItem('currentHash');
+      location.reload();
+    } else {
+      checkHashAndLoadPage();
+    }
+  });
+}
+
+// Function to load a page programmatically
+function loadPage(targetPage, scrollToTop = true) {
+  const pageContent = document.getElementById('page-content');
+  
+  if (!pageContent) {
+    console.error('pageContent element not found');
+    return;
+  }
+
+  // Store current page in localStorage so it persists on reload
+  localStorage.setItem('currentPage', targetPage);
+  localStorage.setItem('currentHash', window.location.hash);
+
+  console.log('Loading page:', targetPage, 'with hash:', window.location.hash);
+
+  // Scroll to top smoothly if requested
+  if (scrollToTop) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Fade out current content
+  pageContent.style.transition = "opacity 0.3s ease";
+  pageContent.style.opacity = "0";
+  
+  setTimeout(() => {
+    // Fetch and Load Content with cache busting
+    const cacheBuster = '?v=' + new Date().getTime();
+    fetch(targetPage + cacheBuster)
+      .then(response => {
+        if (!response.ok) throw new Error("Page not found");
+        return response.text();
+      })
+      .then(html => {
+        // Parse the HTML to extract only the page content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page') || doc.body;
+        
+        // Replace content
+        pageContent.innerHTML = newContent.innerHTML;
+        
+        // Fade in new content
+        setTimeout(() => {
+          pageContent.style.opacity = "1";
+          
+          // Re-initialize dynamic components
+          if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+          }
+          
+          // Re-initialize any page-specific scripts
+          initPageSpecificScripts();
+        }, 50);
+      })
+      .catch(error => {
+        console.error('Error loading page:', error);
+        pageContent.innerHTML = '<div class="p-10 text-center"><h1 class="text-4xl">Page not found</h1><p class="mt-4">The requested page could not be loaded.</p></div>';
+        pageContent.style.opacity = "1";
+      });
+  }, 300);
+}
+
+// Function to initialize page-specific scripts (Swiper, etc.)
+function initPageSpecificScripts() {
+  // Re-initialize Swiper if present on the page
+  const swiperElement = document.querySelector('.story-swiper');
+  if (swiperElement && typeof Swiper !== 'undefined') {
+    new Swiper(".story-swiper", {
+      loop: true,
+      speed: 800,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: "auto",
+      coverflowEffect: {
+        rotate: 5,
+        stretch: 0,
+        depth: 100,
+        modifier: 2,
+        slideShadows: false,
+      },
+    });
+  }
+
+  // Re-attach video modal listeners if testimonial cards exist
+  const cards = document.querySelectorAll(".testimonial-card");
+  const modal = document.getElementById("video-modal");
+  const modalIframe = document.getElementById("modal-iframe");
+  
+  if (cards.length > 0 && modal) {
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const videoId = card.getAttribute("data-video-id");
+        const currentOrigin = window.location.origin;
+
+        modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        setTimeout(() => modal.classList.add("opacity-100"), 10);
+        document.body.style.overflow = "hidden";
+      });
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -220,32 +430,30 @@ document.addEventListener("DOMContentLoaded", function () {
     duration: 800,
     easing: "ease-out",
     once: false,
-    offset: 100, // Offset (in px) from the original trigger point
+    offset: 100,
     delay: 0,
   });
-  var storySwiper = new Swiper(".story-swiper", {
-    loop: true,
-    speed: 800,
-    autoplay: {
-      delay: 4000,
-      disableOnInteraction: false,
-    },
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: "auto",
-    coverflowEffect: {
-      rotate: 5, // Slight rotation for elegance
-      stretch: 0, // Space between slides
-      depth: 100, // Perspective depth
-      modifier: 2, // Effect multiplier
-      slideShadows: false,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-  });
+  
+  // Initialize Swiper on home page
+  if (document.querySelector('.story-swiper')) {
+    var storySwiper = new Swiper(".story-swiper", {
+      loop: true,
+      speed: 800,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: "auto",
+      coverflowEffect: {
+        rotate: 5,
+        stretch: 0,
+        depth: 100,
+        modifier: 2,
+        slideShadows: false,
+      },
+    });
+  }
 });
-
-loadNavbar();

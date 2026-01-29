@@ -3,7 +3,7 @@
 >
   <div class="lg:hidden">
     <a
-      href="#"
+      href="/"
       class="absolute -top-5 left-1/2 -translate-x-1/2 z-0 w-[6rem] h-[6rem] block mt-[1.2rem] -ml-2"
     >
       <img
@@ -22,13 +22,13 @@
       <ul
         class="flex items-center gap-5 font-light uppercase text-nowrap pt-2 text-white transition-colors duration-300"
       >
-        <li class="nav__link px-5 py-4"><a href="#">home</a></li>
-        <li class="nav__link px-5 py-4"><a href="#">about</a></li>
+        <li class="nav__link px-5 py-4"><a href="/kuber/">home</a></li>
+        <li class="nav__link px-5 py-4"><a href="#about">about</a></li>
 
         <li
           class="services__nav-link group relative z-90 nav__link px-5 py-4 hover:bg-white hover:text-[#ca8a04] rounded-md transition-all"
         >
-          <a href="#">services</a>
+          <a href="/kuber/">services</a>
           <div class="absolute top-full left-0 h-10 w-full"></div>
           <div
             class="nav__sub-nav absolute top-[108%] left-0 -z-0 w-[220px] bg-white text-black backdrop-blur-md rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible shadow-2xl transition-all duration-300"
@@ -37,22 +37,22 @@
               <li
                 class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
               >
-                <a href="#">wedding</a>
+                <a href="" class="ajax-link" data-target="/kuber/html/services.html">wedding</a>
               </li>
               <li
                 class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
               >
-                <a href="#">event management</a>
+                <a href="" class="ajax-link" data-target="/kuber/html/services.html">event management</a>
               </li>
               <li
                 class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
               >
-                <a href="#">decor</a>
+                <a href="" class="ajax-link" data-target="/kuber/html/services.html">decor</a>
               </li>
               <li
                 class="hover:text-[#ca8a04] px-2 py-[.6rem] rounded-md transition-colors"
               >
-                <a href="#">corporate</a>
+                <a href="" class="ajax-link" data-target="/kuber/html/services.html">corporate</a>
               </li>
             </ul>
           </div>
@@ -61,18 +61,18 @@
         <li>
           <a
             class="logo__img logo__img--before-scroll inline-block overflow-hidden mx-10 mt-2"
-            href="#"
+            href="/"
           >
             <img src="/kuber/media/images/logo.png" alt="Logo" />
           </a>
         </li>
 
-        <li class="nav__link px-5 py-4"><a href="#">gallery</a></li>
-        <li class="nav__link px-5 py-4"><a href="#">blog</a></li>
+        <li class="nav__link px-5 py-4"><a href="#gallery">gallery</a></li>
+        <li class="nav__link px-5 py-4"><a href="#blog">blog</a></li>
         <li
           class="nav__link px-5 py-4 rounded-tr-lg rounded-br-lg overflow-hidden"
         >
-          <a href="#">contact us</a>
+          <a href="#contact">contact us</a>
         </li>
       </ul>
     </div>
@@ -99,17 +99,17 @@
       class="flex flex-col items-center capitalize font-light w-full px-5 *:py-2 divide-y-2 divide-gray-200 *:w-full"
     >
       <li class="hover:text-[#ca8a04]">
-        <a href="#" class="mobile-link">home</a>
+        <a href="/" class="mobile-link">home</a>
       </li>
       <li class="hover:text-[#ca8a04]">
-        <a href="#" class="mobile-link">about</a>
+        <a href="#about" class="mobile-link">about</a>
       </li>
       <li class="mobile-link-container hover:text-[#ca8a04]">
         <div
           class="flex justify-between items-center w-full group"
           id="mobile-services-toggle"
         >
-          <a class="inline-block" href="#" class="mobile-link">services</a>
+          <a class="inline-block" href="#services">services</a>
           <!-- toggle arrow of services in mobile -->
           <span
             class="transition-transform duration-300 h-5 w-5 inline-block"
@@ -135,22 +135,24 @@
           class="overflow-hidden max-h-0 opacity-0 transition-all duration-300 bg-gray-50/50"
         >
           <li class="mt-2 py-2 border-y-2 border-gray-200">
-            <a href="#">Wedding Planning</a>
+            <a href="#" class="ajax-link" data-target="/kuber/html/services.html">Wedding Planning</a>
           </li>
           <li class="py-2 border-b-2 border-gray-200">
-            <a href="#">Design & Decoration</a>
+            <a href="#" class="ajax-link" data-target="/kuber/html/services.html">Design & Decoration</a>
           </li>
-          <li class="pt-2"><a href="#">Venue Booking</a></li>
+          <li class="pt-2">
+            <a href="#" class="ajax-link" data-target="/kuber/html/services.html">Venue Booking</a>
+          </li>
         </ul>
       </li>
       <li class="hover:text-[#ca8a04]">
-        <a href="#" class="mobile-link">gallery</a>
+        <a href="#gallery" class="mobile-link">gallery</a>
       </li>
       <li class="hover:text-[#ca8a04]">
-        <a href="#" class="mobile-link">blog</a>
+        <a href="#blog" class="mobile-link">blog</a>
       </li>
       <li class="hover:text-[#ca8a04]">
-        <a href="#" class="mobile-link">contact us</a>
+        <a href="#contact" class="mobile-link">contact us</a>
       </li>
     </ul>
   </div>
