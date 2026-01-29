@@ -1,120 +1,104 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const logo = document.querySelector('img[src*="logo"]');
-  if (logo) {
-    console.log('Logo src in navbar:', logo.src);
-    console.log('Current page URL:', window.location.href);
-    console.log('Expected full path:', new URL(logo.src, window.location.href).href);
-    
-    // Test if image loads
-    const testImg = new Image();
-    testImg.onload = () => console.log('Logo loads successfully');
-    testImg.onerror = () => console.error('Logo fails to load');
-    testImg.src = logo.src;
-  }
+/* =====================================================
+   BASE PATH (AUTO-DETECT: local /kuber vs production /)
+===================================================== */
+const BASE_PATH = window.location.pathname.includes("/kuber/")
+  ? "/kuber/"
+  : "/";
+
+function asset(path) {
+  console.log(BASE_PATH + path.replace(/^\/+/, ""));
+  return BASE_PATH + path.replace(/^\/+/, "");
+}
+
+/* =====================================================
+   DOM READY
+===================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  debugLogo();
+  loadComponentsParallel();
+  initAOS();
 });
 
+/* =====================================================
+   LOGO DEBUG
+===================================================== */
+function debugLogo() {
+  const logo = document.querySelector('img[src*="logo"]');
+  if (!logo) return;
+
+  console.log("Logo src:", logo.src);
+  console.log("Page URL:", window.location.href);
+
+  const img = new Image();
+  img.onload = () => console.log("✅ Logo loads");
+  img.onerror = () => console.error("❌ Logo fails");
+  img.src = logo.src;
+}
+
+/* =====================================================
+   LOAD COMPONENTS (NAV / FOOTER / CONTACT)
+===================================================== */
 function loadComponentsParallel() {
-  // Get current page URL to determine correct paths
-  const basePath = window.location.pathname.includes('/kuber/') ? './' : '../';
-  
   const components = [
-    { id: "nav-placeholder", url: `${basePath}html/navbar.html` },
-    { id: "footer-placeholder", url: `${basePath}html/footer.html` },
-    { id: "contact-placeholder", url: `${basePath}html/contact.html` },
+    { id: "nav-placeholder", url: asset("html/navbar.html") },
+    { id: "footer-placeholder", url: asset("html/footer.html") },
+    { id: "contact-placeholder", url: asset("html/contact.html") },
   ];
 
-  // Create promises for all components
-  const promises = components.map((component) => {
-    return fetch(component.url)
-      .then((response) => {
-        if (!response.ok) throw new Error(`Failed to load ${component.url}`);
-        return response.text();
-      })
-      .then((html) => {
-        const placeholder = document.getElementById(component.id);
-        if (placeholder) {
-          placeholder.innerHTML = html;
-        }
-      })
-      .catch((error) => {
-        console.error(`Error loading ${component.url}:`, error);
-      });
-  });
-
-  // When all components are loaded
-  Promise.all(promises)
+  Promise.all(
+    components.map(c =>
+      fetch(c.url)
+        .then(res => {
+          if (!res.ok) throw new Error(c.url);
+          return res.text();
+        })
+        .then(html => {
+          const el = document.getElementById(c.id);
+          if (el) el.innerHTML = html;
+        })
+    )
+  )
     .then(() => {
-      console.log("All components loaded");
-
-      // Initialize navbar scripts
-      if (typeof initializeNavScripts === "function") {
-        initializeNavScripts();
-      }
-
-      // Check for hash on initial load
-      checkHashAndLoadPage();
+      fixAssets();
+      initializeNavScripts();
+      handleHashRouting();
     })
-    .catch((error) => {
-      console.error("Error loading components:", error);
-    });
+    .catch(console.error);
 }
 
-// Start loading when DOM is ready
-document.addEventListener("DOMContentLoaded", loadComponentsParallel);
+/* =====================================================
+   FIX IMG / SOURCE PATHS AFTER AJAX LOAD
+===================================================== */
+function fixAssets() {
+  document.querySelectorAll("img, source").forEach(el => {
+    const src = el.getAttribute("src");
+    if (!src || src.startsWith("http")) return;
+    el.src = asset(src);
+  });
+}
 
-// Check hash and load appropriate page
-function checkHashAndLoadPage() {
-  const hash = window.location.hash;
-  
-  // If no hash but we have a stored page (from before reload), restore it
-  if ((!hash || hash === '#') && localStorage.getItem('currentPage')) {
-    const storedPage = localStorage.getItem('currentPage');
-    const storedHash = localStorage.getItem('currentHash');
-    
-    console.log('Restoring page after reload:', storedPage, storedHash);
-    
-    // Restore hash
-    if (storedHash) {
-      window.location.hash = storedHash;
-    }
-    
-    // Load the stored page
-    loadPage(storedPage, false);
-    return;
-  }
-  
-  if (hash && hash !== '#') {
-    // Map hash to page files
-    const pageMap = {
-      '#services': '/kuber/html/services.html',
-      '#wedding': '/kuber/html/services.html',
-      '#event-management': '/kuber/html/services.html',
-      '#decor': '/kuber/html/services.html',
-      '#corporate': '/kuber/html/services.html',
-      '#about': '#about-section',
-      '#gallery': '#gallery-section',
-      '#blog': '#blog-section',
-      '#contact': '#contact'
-    };
+/* =====================================================
+   HASH ROUTING
+===================================================== */
+function handleHashRouting() {
+  const hash = window.location.hash.replace("#", "");
 
-    const targetPage = pageMap[hash];
-    if (targetPage && targetPage.includes('.html')) {
-      // Load page
-      loadPage(targetPage, false);
-    } else if (targetPage) {
-      // Scroll to section
-      const section = document.querySelector(targetPage);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  } else {
-    // Clear stored page if we're on home
-    localStorage.removeItem('currentPage');
-    localStorage.removeItem('currentHash');
+  const map = {
+    services: "html/services.html",
+    wedding: "html/services.html",
+    "event-management": "html/services.html",
+    decor: "html/services.html",
+    corporate: "html/services.html",
+  };
+
+  if (map[hash]) {
+    loadPage(map[hash], false);
   }
 }
 
+/* =====================================================
+   NAVBAR + INTERACTIONS
+===================================================== */
 function initializeNavScripts() {
   // 1. Select all elements (These now exist in the DOM)
   const navbar = document.getElementById("navbar");
@@ -226,7 +210,7 @@ function initializeNavScripts() {
   });
 
   const closeFunction = () => {
-    modal.classList.remove("opacity-0");
+    modal.classList.remove("opacity-100");
     setTimeout(() => {
       modal.classList.add("hidden");
       modal.classList.remove("flex");
@@ -241,15 +225,11 @@ function initializeNavScripts() {
   });
 
   // AJAX Navigation with hash-based routing (prevents 404 errors)
-  // This handles ALL ajax-link clicks including subnav items
   ajaxLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-      e.preventDefault(); // Prevent default # behavior
-      
+      e.preventDefault();
       const targetPage = this.getAttribute('data-target');
       const pageName = this.textContent.trim().toLowerCase().replace(/\s+/g, '-');
-      
-      console.log('Ajax link clicked:', pageName, targetPage);
       
       // Update hash (this won't cause 404 errors on refresh)
       window.location.hash = pageName;
@@ -264,164 +244,42 @@ function initializeNavScripts() {
     });
   });
 
-  // Handle ONLY logo clicks for home - NOT regular # links
-  const logoLinks = document.querySelectorAll('.logo__img');
-  logoLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('Logo clicked - going home');
-      
-      // Clear stored page
-      localStorage.removeItem('currentPage');
-      localStorage.removeItem('currentHash');
-      
-      // Clear hash and reload
-      window.location.hash = '';
-      location.reload();
-    });
-  });
-
-  // Handle specific home link clicks (not ajax-links with #)
-  const homeLink = document.querySelector('a[href="/kuber/"]');
-  if (homeLink) {
-    homeLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('Home link clicked');
-      
-      // Clear stored page
-      localStorage.removeItem('currentPage');
-      localStorage.removeItem('currentHash');
-      
-      // Clear hash and reload
-      window.location.hash = '';
-      location.reload();
-    });
-  }
-
   // Handle hash changes (back/forward button)
   window.addEventListener('hashchange', function() {
-    const hash = window.location.hash;
-    console.log('Hash changed to:', hash);
-    
-    if (!hash || hash === '#') {
-      // Going back to home
-      localStorage.removeItem('currentPage');
-      localStorage.removeItem('currentHash');
-      location.reload();
-    } else {
-      checkHashAndLoadPage();
-    }
+    checkHashAndLoadPage();
   });
 }
 
-// Function to load a page programmatically
-function loadPage(targetPage, scrollToTop = true) {
-  const pageContent = document.getElementById('page-content');
-  
-  if (!pageContent) {
-    console.error('pageContent element not found');
-    return;
-  }
+/* =====================================================
+   LOAD PAGE (AJAX)
+===================================================== */
+function loadPage(page, scrollTop = true) {
+  const container = document.getElementById("page-content");
+  if (!container) return;
 
-  // Store current page in localStorage so it persists on reload
-  localStorage.setItem('currentPage', targetPage);
-  localStorage.setItem('currentHash', window.location.hash);
+  localStorage.setItem("currentPage", page);
 
-  console.log('Loading page:', targetPage, 'with hash:', window.location.hash);
+  if (scrollTop) window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // Scroll to top smoothly if requested
-  if (scrollToTop) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  container.style.opacity = "0";
 
-  // Fade out current content
-  pageContent.style.transition = "opacity 0.3s ease";
-  pageContent.style.opacity = "0";
-  
-  setTimeout(() => {
-    // Fetch and Load Content with cache busting
-    const cacheBuster = '?v=' + new Date().getTime();
-    fetch(targetPage + cacheBuster)
-      .then(response => {
-        if (!response.ok) throw new Error("Page not found");
-        return response.text();
-      })
-      .then(html => {
-        // Parse the HTML to extract only the page content
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page') || doc.body;
-        
-        // Replace content
-        pageContent.innerHTML = newContent.innerHTML;
-        
-        // Fade in new content
-        setTimeout(() => {
-          pageContent.style.opacity = "1";
-          
-          // Re-initialize dynamic components
-          if (typeof AOS !== 'undefined') {
-            AOS.refresh();
-          }
-          
-          // Re-initialize any page-specific scripts
-          initPageSpecificScripts();
-        }, 50);
-      })
-      .catch(error => {
-        console.error('Error loading page:', error);
-        pageContent.innerHTML = '<div class="p-10 text-center"><h1 class="text-4xl">Page not found</h1><p class="mt-4">The requested page could not be loaded.</p></div>';
-        pageContent.style.opacity = "1";
-      });
-  }, 300);
-}
-
-// Function to initialize page-specific scripts (Swiper, etc.)
-function initPageSpecificScripts() {
-  // Re-initialize Swiper if present on the page
-  const swiperElement = document.querySelector('.story-swiper');
-  if (swiperElement && typeof Swiper !== 'undefined') {
-    new Swiper(".story-swiper", {
-      loop: true,
-      speed: 800,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      coverflowEffect: {
-        rotate: 5,
-        stretch: 0,
-        depth: 100,
-        modifier: 2,
-        slideShadows: false,
-      },
+  fetch(asset(page))
+    .then(res => {
+      if (!res.ok) throw new Error("404");
+      return res.text();
+    })
+    .then(html => {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      container.innerHTML = doc.body.innerHTML;
+      fixAssets();
+      initPageSpecificScripts();
+      container.style.opacity = "1";
+    })
+    .catch(() => {
+      container.innerHTML =
+        "<div class='p-10 text-center'><h1>Page not found</h1></div>";
+      container.style.opacity = "1";
     });
-  }
-
-  // Re-attach video modal listeners if testimonial cards exist
-  const cards = document.querySelectorAll(".testimonial-card");
-  const modal = document.getElementById("video-modal");
-  const modalIframe = document.getElementById("modal-iframe");
-  
-  if (cards.length > 0 && modal) {
-    cards.forEach((card) => {
-      card.addEventListener("click", () => {
-        const videoId = card.getAttribute("data-video-id");
-        const currentOrigin = window.location.origin;
-
-        modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
-
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-        setTimeout(() => modal.classList.add("opacity-100"), 10);
-        document.body.style.overflow = "hidden";
-      });
-    });
-  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
