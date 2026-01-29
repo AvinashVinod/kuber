@@ -6,8 +6,9 @@ const BASE_PATH = window.location.pathname.includes("/kuber/")
   : "/";
 
 function asset(path) {
-  console.log(BASE_PATH + path.replace(/^\/+/, ""));
-  return BASE_PATH + path.replace(/^\/+/, "");
+  const result = BASE_PATH + path.replace(/^\/+/, "");
+  console.log("Asset path:", result);
+  return result;
 }
 
 /* =====================================================
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   debugLogo();
   loadComponentsParallel();
   initAOS();
+  initSwiper();
 });
 
 /* =====================================================
@@ -59,11 +61,14 @@ function loadComponentsParallel() {
     )
   )
     .then(() => {
+      console.log("✅ All components loaded");
       fixAssets();
       initializeNavScripts();
       handleHashRouting();
     })
-    .catch(console.error);
+    .catch(err => {
+      console.error("❌ Component load error:", err);
+    });
 }
 
 /* =====================================================
@@ -71,9 +76,15 @@ function loadComponentsParallel() {
 ===================================================== */
 function fixAssets() {
   document.querySelectorAll("img, source").forEach(el => {
-    const src = el.getAttribute("src");
-    if (!src || src.startsWith("http")) return;
-    el.src = asset(src);
+    const src = el.getAttribute("src") || el.getAttribute("data-src");
+    if (!src || src.startsWith("http") || src.startsWith(BASE_PATH)) return;
+    
+    const newSrc = asset(src);
+    if (el.tagName === "SOURCE") {
+      el.setAttribute("srcset", newSrc);
+    } else {
+      el.src = newSrc;
+    }
   });
 }
 
@@ -82,6 +93,8 @@ function fixAssets() {
 ===================================================== */
 function handleHashRouting() {
   const hash = window.location.hash.replace("#", "");
+  
+  console.log("Current hash:", hash);
 
   const map = {
     services: "html/services.html",
@@ -92,16 +105,32 @@ function handleHashRouting() {
   };
 
   if (map[hash]) {
+    console.log("Loading page for hash:", hash);
     loadPage(map[hash], false);
+  } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact") && !hash.startsWith("gallery") && !hash.startsWith("blog")) {
+    // Check if there's a stored page from before reload
+    const stored = localStorage.getItem("currentPage");
+    if (stored) {
+      console.log("Restoring stored page:", stored);
+      loadPage(stored, false);
+    }
   }
+}
+
+function checkHashAndLoadPage() {
+  handleHashRouting();
 }
 
 /* =====================================================
    NAVBAR + INTERACTIONS
 ===================================================== */
 function initializeNavScripts() {
-  // 1. Select all elements (These now exist in the DOM)
   const navbar = document.getElementById("navbar");
+  if (!navbar) {
+    console.error("❌ Navbar not found");
+    return;
+  }
+
   const subNav = document.querySelector(".nav__sub-nav");
   const subNavLinks = document.querySelectorAll(".nav__sub-nav-links li");
   const servicesNavLink = document.querySelector(".services__nav-link");
@@ -110,7 +139,7 @@ function initializeNavScripts() {
 
   const menuBtn = document.getElementById("menu-btn");
   const mobileMenu = document.getElementById("mobile-menu");
-  const spans = menuBtn.querySelectorAll("span");
+  const spans = menuBtn?.querySelectorAll("span") || [];
   const servicesToggle = document.getElementById("mobile-services-toggle");
   const mobileSubNav = document.getElementById("mobile-sub-nav");
   const servicesArrow = document.getElementById("services-arrow");
@@ -118,134 +147,147 @@ function initializeNavScripts() {
   const modal = document.getElementById("video-modal");
   const modalIframe = document.getElementById("modal-iframe");
   const closeModal = document.getElementById("close-modal");
-  const cards = document.querySelectorAll(".testimonial-card");
 
   const ajaxLinks = document.querySelectorAll('.ajax-link');
   const pageContent = document.getElementById('page-content');
 
-  // 2. Initial Burger State
-  spans[0].style.transform = "translateY(-8px)";
-  spans[2].style.transform = "translateY(8px)";
+  console.log("Found ajax links:", ajaxLinks.length);
 
-  // 3. Desktop Scroll Logic (Moved inside here)
+  // Initial Burger State
+  if (spans.length >= 3) {
+    spans[0].style.transform = "translateY(-8px)";
+    spans[2].style.transform = "translateY(8px)";
+  }
+
+  // Desktop Scroll Logic
   window.onscroll = function () {
     if (window.scrollY > 50) {
       navbar.classList.add("bg-white", "shadow-lg", "px-4");
-      navList.classList.replace("text-white", "text-black");
-      subNav.classList.replace("top-[108%]", "top-[140%]");
+      navList?.classList.replace("text-white", "text-black");
+      subNav?.classList.replace("top-[108%]", "top-[140%]");
 
       subNavLinks.forEach((link) =>
         link.classList.add("hover:bg-black", "hover:text-white"),
       );
-      servicesNavLink.classList.add("hover:bg-black", "hover:text-white");
-      logo.classList.replace(
+      servicesNavLink?.classList.add("hover:bg-black", "hover:text-white");
+      logo?.classList.replace(
         "logo__img--before-scroll",
         "logo__img--after-scroll",
       );
     } else {
       navbar.classList.remove("bg-white", "shadow-lg", "px-4");
-      navList.classList.replace("text-black", "text-white");
-      subNav.classList.replace("top-[140%]", "top-[108%]");
+      navList?.classList.replace("text-black", "text-white");
+      subNav?.classList.replace("top-[140%]", "top-[108%]");
 
       subNavLinks.forEach((link) =>
         link.classList.remove("hover:bg-black", "hover:text-white"),
       );
-      servicesNavLink.classList.remove("hover:bg-black", "hover:text-white");
-      logo.classList.replace(
+      servicesNavLink?.classList.remove("hover:bg-black", "hover:text-white");
+      logo?.classList.replace(
         "logo__img--after-scroll",
         "logo__img--before-scroll",
       );
     }
   };
 
-  // 4. Hamburger Toggle
-  menuBtn.addEventListener("click", () => {
-    mobileMenu.classList.toggle("translate-y-0");
-    const isMenuOpening = mobileMenu.classList.contains("translate-y-0");
+  // Hamburger Toggle
+  menuBtn?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("translate-y-0");
+    const isMenuOpening = mobileMenu?.classList.contains("translate-y-0");
 
     if (isMenuOpening) {
       spans[0].style.transform = "translateY(0) rotate(45deg)";
       spans[1].style.opacity = "0";
       spans[2].style.transform = "translateY(0) rotate(-45deg)";
     } else {
-      spans[0].style.transform =
-        "translateY(-10px) rotate(0deg) translateY(2px)";
+      spans[0].style.transform = "translateY(-10px) rotate(0deg) translateY(2px)";
       spans[1].style.opacity = "1";
-      spans[2].style.transform =
-        "translateY(10px) rotate(0deg) translateY(-2px)";
-      mobileSubNav.style.maxHeight = "0px";
-      mobileSubNav.style.opacity = "0";
+      spans[2].style.transform = "translateY(10px) rotate(0deg) translateY(-2px)";
+      if (mobileSubNav) {
+        mobileSubNav.style.maxHeight = "0px";
+        mobileSubNav.style.opacity = "0";
+      }
     }
   });
 
-  // 5. Mobile Accordion
-  servicesToggle.addEventListener("click", (e) => {
+  // Mobile Accordion
+  servicesToggle?.addEventListener("click", (e) => {
     e.preventDefault();
     const isOpen =
-      mobileSubNav.style.maxHeight && mobileSubNav.style.maxHeight !== "0px";
+      mobileSubNav?.style.maxHeight && mobileSubNav.style.maxHeight !== "0px";
     if (isOpen) {
       mobileSubNav.style.maxHeight = "0px";
       mobileSubNav.style.opacity = "0";
-      servicesArrow.style.transform = "rotate(0deg)";
+      if (servicesArrow) servicesArrow.style.transform = "rotate(0deg)";
     } else {
       mobileSubNav.style.maxHeight = mobileSubNav.scrollHeight + "px";
       mobileSubNav.style.opacity = "1";
-      servicesArrow.style.transform = "rotate(180deg)";
+      if (servicesArrow) servicesArrow.style.transform = "rotate(180deg)";
     }
   });
 
   // Video Modal Functionality
+  const cards = document.querySelectorAll(".testimonial-card");
   cards.forEach((card) => {
     card.addEventListener("click", () => {
       const videoId = card.getAttribute("data-video-id");
       const currentOrigin = window.location.origin;
 
-      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+      if (modalIframe) {
+        modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+      }
 
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-      setTimeout(() => modal.classList.add("opacity-100"), 10);
+      modal?.classList.remove("hidden");
+      modal?.classList.add("flex");
+      setTimeout(() => modal?.classList.add("opacity-100"), 10);
       document.body.style.overflow = "hidden";
     });
   });
 
   const closeFunction = () => {
-    modal.classList.remove("opacity-100");
+    modal?.classList.remove("opacity-100");
     setTimeout(() => {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      modalIframe.src = "";
+      modal?.classList.add("hidden");
+      modal?.classList.remove("flex");
+      if (modalIframe) modalIframe.src = "";
       document.body.style.overflow = "";
     }, 300);
   };
 
-  closeModal.addEventListener("click", closeFunction);
-  modal.addEventListener("click", (e) => {
+  closeModal?.addEventListener("click", closeFunction);
+  modal?.addEventListener("click", (e) => {
     if (e.target === modal) closeFunction();
   });
 
-  // AJAX Navigation with hash-based routing (prevents 404 errors)
+  // AJAX Navigation - THIS IS THE KEY PART!
   ajaxLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
+      
       const targetPage = this.getAttribute('data-target');
       const pageName = this.textContent.trim().toLowerCase().replace(/\s+/g, '-');
       
-      // Update hash (this won't cause 404 errors on refresh)
+      console.log("🔵 Ajax link clicked!");
+      console.log("   Text:", this.textContent.trim());
+      console.log("   Target:", targetPage);
+      console.log("   Hash will be:", pageName);
+      
+      // Update hash
       window.location.hash = pageName;
       
       // Load the page
       loadPage(targetPage, true);
 
       // Close mobile menu if open
-      if (mobileMenu && mobileMenu.classList.contains("translate-y-0")) {
-        menuBtn.click();
+      if (mobileMenu?.classList.contains("translate-y-0")) {
+        menuBtn?.click();
       }
     });
   });
 
   // Handle hash changes (back/forward button)
   window.addEventListener('hashchange', function() {
+    console.log("Hash changed to:", window.location.hash);
     checkHashAndLoadPage();
   });
 }
@@ -255,63 +297,144 @@ function initializeNavScripts() {
 ===================================================== */
 function loadPage(page, scrollTop = true) {
   const container = document.getElementById("page-content");
-  if (!container) return;
+  if (!container) {
+    console.error("❌ page-content container not found!");
+    return;
+  }
+
+  console.log("📄 Loading page:", page);
 
   localStorage.setItem("currentPage", page);
 
-  if (scrollTop) window.scrollTo({ top: 0, behavior: "smooth" });
+  if (scrollTop) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
+  // Fade out
+  container.style.transition = "opacity 0.3s ease";
   container.style.opacity = "0";
 
-  fetch(asset(page))
-    .then(res => {
-      if (!res.ok) throw new Error("404");
-      return res.text();
-    })
-    .then(html => {
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      container.innerHTML = doc.body.innerHTML;
-      fixAssets();
-      initPageSpecificScripts();
-      container.style.opacity = "1";
-    })
-    .catch(() => {
-      container.innerHTML =
-        "<div class='p-10 text-center'><h1>Page not found</h1></div>";
-      container.style.opacity = "1";
-    });
+  setTimeout(() => {
+    const fullPath = asset(page);
+    console.log("   Fetching:", fullPath);
+    
+    fetch(fullPath + "?v=" + Date.now()) // Cache buster
+      .then(res => {
+        if (!res.ok) throw new Error("404");
+        return res.text();
+      })
+      .then(html => {
+        console.log("✅ Page loaded successfully");
+        
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page');
+        
+        if (newContent) {
+          container.innerHTML = newContent.innerHTML;
+        } else {
+          console.warn("⚠️  No page wrapper found, using body");
+          container.innerHTML = doc.body.innerHTML;
+        }
+        
+        fixAssets();
+        initPageSpecificScripts();
+        
+        // Fade in
+        setTimeout(() => {
+          container.style.opacity = "1";
+          
+          // Re-init AOS
+          if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+          }
+        }, 50);
+      })
+      .catch(err => {
+        console.error("❌ Page load failed:", err);
+        container.innerHTML =
+          "<div class='flex items-center justify-center p-10 text-center h-[100vh]'><h1 class='text-4xl'>Page not found</h1><p class='mt-4'>Could not load: " + page + "</p></div>";
+        container.style.opacity = "1";
+      });
+  }, 300);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Initialize AOS (Animate on Scroll)
-  AOS.init({
-    duration: 800,
-    easing: "ease-out",
-    once: false,
-    offset: 100,
-    delay: 0,
-  });
+/* =====================================================
+   PAGE-SPECIFIC SCRIPTS
+===================================================== */
+function initPageSpecificScripts() {
+  // Re-initialize video modals
+  const cards = document.querySelectorAll(".testimonial-card");
+  const modal = document.getElementById("video-modal");
+  const modalIframe = document.getElementById("modal-iframe");
   
-  // Initialize Swiper on home page
-  if (document.querySelector('.story-swiper')) {
-    var storySwiper = new Swiper(".story-swiper", {
-      loop: true,
-      speed: 800,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      coverflowEffect: {
-        rotate: 5,
-        stretch: 0,
-        depth: 100,
-        modifier: 2,
-        slideShadows: false,
-      },
+  if (cards.length > 0 && modal) {
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const videoId = card.getAttribute("data-video-id");
+        const currentOrigin = window.location.origin;
+
+        if (modalIframe) {
+          modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+        }
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        setTimeout(() => modal.classList.add("opacity-100"), 10);
+        document.body.style.overflow = "hidden";
+      });
     });
   }
-});
+  
+  // Re-initialize Swiper if present
+  initSwiper();
+}
+
+/* =====================================================
+   INIT AOS
+===================================================== */
+function initAOS() {
+  if (typeof AOS !== 'undefined') {
+    AOS.init({
+      duration: 800,
+      easing: "ease-out",
+      once: false,
+      offset: 100,
+      delay: 0,
+    });
+  }
+}
+
+/* =====================================================
+   INIT SWIPER
+===================================================== */
+function initSwiper() {
+  if (typeof Swiper === 'undefined') return;
+  
+  const swiperEl = document.querySelector('.story-swiper');
+  if (!swiperEl) return;
+  
+  // Destroy existing instance if any
+  if (swiperEl.swiper) {
+    swiperEl.swiper.destroy(true, true);
+  }
+  
+  new Swiper(".story-swiper", {
+    loop: true,
+    speed: 800,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+      rotate: 5,
+      stretch: 0,
+      depth: 100,
+      modifier: 2,
+      slideShadows: false,
+    },
+  });
+}
