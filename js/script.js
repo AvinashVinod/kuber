@@ -285,6 +285,24 @@ function initializeNavScripts() {
     });
   });
 
+  // Handle HOME link clicks - works in both local (/kuber/) and production (/)
+  const homeLinks = document.querySelectorAll('.home-link');
+  homeLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      console.log("🏠 Home link clicked");
+      
+      // Clear hash and stored page
+      window.location.hash = '';
+      localStorage.removeItem('currentPage');
+      localStorage.removeItem('currentHash');
+      
+      // Reload to show home page
+      window.location.href = BASE_PATH;
+    });
+  });
+
   // Handle hash changes (back/forward button)
   window.addEventListener('hashchange', function() {
     console.log("Hash changed to:", window.location.hash);
