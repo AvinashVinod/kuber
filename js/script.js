@@ -7,7 +7,7 @@ const BASE_PATH = window.location.pathname.includes("/kuber/")
 
 function asset(path) {
   const result = BASE_PATH + path.replace(/^\/+/, "");
-  console.log("Asset path:", result);
+  // console.log("Asset path:", result);
   return result;
 }
 
@@ -61,7 +61,7 @@ function loadComponentsParallel() {
     )
   )
     .then(() => {
-      console.log("✅ All components loaded");
+      // console.log("✅ All components loaded");
       fixAssets();
       initializeNavScripts();
       handleHashRouting();
@@ -94,7 +94,7 @@ function fixAssets() {
 function handleHashRouting() {
   const hash = window.location.hash.replace("#", "");
   
-  console.log("Current hash:", hash);
+  // console.log("Current hash:", hash);
 
   const map = {
     services: "html/services.html",
@@ -105,7 +105,7 @@ function handleHashRouting() {
   };
 
   if (map[hash]) {
-    console.log("Loading page for hash:", hash);
+    // console.log("Loading page for hash:", hash);
     loadPage(map[hash], false);
   } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact") && !hash.startsWith("gallery") && !hash.startsWith("blog")) {
     // Check if there's a stored page from before reload
@@ -127,7 +127,7 @@ function checkHashAndLoadPage() {
 function initializeNavScripts() {
   const navbar = document.getElementById("navbar");
   if (!navbar) {
-    console.error("❌ Navbar not found");
+    console.error("Navbar not found");
     return;
   }
 
@@ -151,7 +151,7 @@ function initializeNavScripts() {
   const ajaxLinks = document.querySelectorAll('.ajax-link');
   const pageContent = document.getElementById('page-content');
 
-  console.log("Found ajax links:", ajaxLinks.length);
+  // console.log("Found ajax links:", ajaxLinks.length);
 
   // Initial Burger State
   if (spans.length >= 3) {
@@ -320,7 +320,7 @@ function loadPage(page, scrollTop = true) {
     return;
   }
 
-  console.log("📄 Loading page:", page);
+  // console.log("📄 Loading page:", page);
 
   localStorage.setItem("currentPage", page);
 
@@ -334,7 +334,7 @@ function loadPage(page, scrollTop = true) {
 
   setTimeout(() => {
     const fullPath = asset(page);
-    console.log("   Fetching:", fullPath);
+    // console.log("   Fetching:", fullPath);
     
     fetch(fullPath + "?v=" + Date.now()) // Cache buster
       .then(res => {
@@ -342,7 +342,7 @@ function loadPage(page, scrollTop = true) {
         return res.text();
       })
       .then(html => {
-        console.log("✅ Page loaded successfully");
+        // console.log("✅ Page loaded successfully");
         
         const doc = new DOMParser().parseFromString(html, "text/html");
         const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page');
