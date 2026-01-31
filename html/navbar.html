@@ -1,5 +1,5 @@
 <nav
-  class="fixed inset-x-0 top-0 z-[99] flex items-center px-6 py-0 lg:py-0 bg-white"
+  class="fixed inset-x-0 top-0 z-[100] flex items-center px-6 py-0 lg:py-0 bg-white"
 >
   <div class="lg:hidden">
     <a
@@ -67,8 +67,9 @@
           </a>
         </li>
 
-        <li class="nav__link px-5 py-4"><a href="#gallery">gallery</a></li>
-        <li class="nav__link px-5 py-4"><a href="#blog">blog</a></li>
+        <!-- FIXED: Added ajax-link class to gallery and blog -->
+        <li class="nav__link px-5 py-4"><a href="#" class="ajax-link" data-target="html/gallery.html">gallery</a></li>
+        <li class="nav__link px-5 py-4"><a href="#" class="ajax-link" data-target="html/blog.html">blog</a></li>
         <li
           class="nav__link px-5 py-4 rounded-tr-lg rounded-br-lg overflow-hidden"
         >
@@ -145,11 +146,12 @@
           </li>
         </ul>
       </li>
+      <!-- FIXED: Added ajax-link class to mobile gallery and blog -->
       <li class="hover:text-[#ca8a04]">
-        <a href="#gallery" class="mobile-link">gallery</a>
+        <a href="#" class="mobile-link ajax-link" data-target="html/gallery.html">gallery</a>
       </li>
       <li class="hover:text-[#ca8a04]">
-        <a href="#blog" class="mobile-link">blog</a>
+        <a href="#" class="mobile-link ajax-link" data-target="html/blog.html">blog</a>
       </li>
       <li class="hover:text-[#ca8a04]">
         <a href="#contact" class="mobile-link">contact us</a>

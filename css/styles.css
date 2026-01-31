@@ -23,6 +23,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: "Poppins", sans-serif;
+  user-select: none;
 }
 
 /* Optimize scrolling */
@@ -67,6 +68,16 @@ img, video {
 
 .grayscale-remove {
   filter: grayscale(0%);
+}
+
+/* ===========FANCY BOX============ */
+
+.fancybox__caption {
+  display: none !important;
+}
+
+.fancybox__toolbar {
+  background: transparent !important;
 }
 
 /* ====== ANIMATION OPTIMIZATION ====== */

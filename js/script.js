@@ -94,7 +94,7 @@ function fixAssets() {
 function handleHashRouting() {
   const hash = window.location.hash.replace("#", "");
   
-  // console.log("Current hash:", hash);
+  console.log("Current hash:", hash);
 
   const map = {
     services: "html/services.html",
@@ -102,12 +102,15 @@ function handleHashRouting() {
     "event-management": "html/services.html",
     decor: "html/services.html",
     corporate: "html/services.html",
+    gallery: "html/gallery.html",
+    blog: "html/blog.html", // Add if you have blog
   };
 
   if (map[hash]) {
-    // console.log("Loading page for hash:", hash);
+    console.log("Loading page for hash:", hash);
     loadPage(map[hash], false);
-  } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact") && !hash.startsWith("gallery") && !hash.startsWith("blog")) {
+  } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact")) {
+    // Modified condition
     // Check if there's a stored page from before reload
     const stored = localStorage.getItem("currentPage");
     if (stored) {
@@ -320,7 +323,7 @@ function loadPage(page, scrollTop = true) {
     return;
   }
 
-  // console.log("📄 Loading page:", page);
+  console.log("📄 Loading page:", page);
 
   localStorage.setItem("currentPage", page);
 
@@ -334,18 +337,21 @@ function loadPage(page, scrollTop = true) {
 
   setTimeout(() => {
     const fullPath = asset(page);
-    // console.log("   Fetching:", fullPath);
+    console.log("   Fetching:", fullPath);
     
     fetch(fullPath + "?v=" + Date.now()) // Cache buster
       .then(res => {
-        if (!res.ok) throw new Error("404");
+        if (!res.ok) throw new Error("404 - " + fullPath);
         return res.text();
       })
       .then(html => {
-        // console.log("✅ Page loaded successfully");
+        console.log("✅ Page loaded successfully");
+        console.log("HTML content:", html.substring(0, 100) + "...");
         
         const doc = new DOMParser().parseFromString(html, "text/html");
         const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page');
+        
+        console.log("Found content with selector:", newContent);
         
         if (newContent) {
           container.innerHTML = newContent.innerHTML;
@@ -456,3 +462,59 @@ function initSwiper() {
     },
   });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if Fancybox is available
+  if (typeof Fancybox !== 'undefined') {
+    // Initialize Fancybox with custom options - NO CAPTIONS
+    Fancybox.bind('[data-fancybox="services-gallery"]', {
+      // Options for the gallery
+      infinite: true,
+      hideScrollbar: false,
+      animated: true,
+      showClass: 'fancybox-fadeIn',
+      hideClass: 'fancybox-fadeOut',
+      
+      // Thumbnails options
+      Thumbs: {
+        autoStart: true,
+      },
+      
+      // Toolbar options - simplified
+      Toolbar: {
+        display: {
+          left: [],
+          middle: [],
+          right: ['close'],
+        },
+      },
+      
+      // Image options
+      Image: {
+        zoom: true,
+        click: 'toggleZoom',
+        wheel: 'slide',
+        zoomOpacity: 'auto',
+      },
+      
+      // NO CAPTIONS - Disable captions completely
+      caption: false,
+      
+      // Disable caption bar
+      Carousel: {
+        Navigation: false,
+      },
+      
+      // Remove any info display
+      on: {
+        reveal: (fancybox, slide) => {
+          // Remove any caption elements if they exist
+          const captionElement = document.querySelector('.fancybox__caption');
+          if (captionElement) {
+            captionElement.style.display = 'none';
+          }
+        }
+      }
+    });
+  }
+});

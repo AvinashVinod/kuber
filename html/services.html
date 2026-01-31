@@ -1,30 +1,309 @@
 <section class="services-page">
-  <div class="services__banner-container h-[60vh] w-full relative overflow-hidden">
-    <img src="./media/images/services.avif" alt="Services" />
-    <div class="absolute inset-0 bg-black/40 flex items-end justify-start md:p-6">
+  <div
+    class="services__banner-container h-[60vh] w-full relative overflow-hidden"
+  >
+    <img
+      src="./media/images/services.avif"
+      alt="Services"
+      class="w-full h-full object-cover"
+    />
+    <div
+      class="absolute inset-0 bg-black/40 flex items-end justify-start p-3 md:p-6"
+    >
       <div class="text-white">
-        <h1 class="text-5xl md:text-7xl font-light mb-4">Our Services</h1>
-        <p class="text-xl md:text-2xl font-light">Crafting unforgettable moments</p>
+        <h1 class="text-5xl md:text-7xl font-light">Our Services</h1>
+        <p class="text-lg md:text-xl font-light opacity-30">
+          Crafting unforgettable moments
+        </p>
       </div>
     </div>
   </div>
-  <div class="flex py-10 maximum-width">
-    <div class="basis-[60%] flex flex-col gap-5">
-        <h2 class="text-[2.5vw] leading-none text-[#f68fa2]">Exquisite Wedding Decor & Design for Your Special Day</h2>
-        <h2 class="h2">Transform Your Wedding with Exquisite Design and Decoration</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum reprehenderit unde quam fugiat eum ipsa nemo explicabo mollitia veritatis quia iure nam sed labore totam dicta doloribus eaque, consequatur illo vitae omnis vel cum. Maxime ut hic delectus error quibusdam?</p>
+  <div
+    class="maximum-width flex flex-col gap-10 py-10 md:pt-[5rem] md:pb-[7rem]"
+  >
+    <div class="group flex flex-col md:flex-row gap-5 md:gap-10">
+      <div class="basis-[60%] flex flex-col gap-5">
+        <h1 class="leading-none text-[#f68fa2] pb-3 h1">
+          Exquisite Wedding Decor & Design for Your Special Day
+        </h1>
         <div class="">
-            <h2 class="h2">Our Services Include:</h2>
-            <ul style="list-style-type: circle;">
-                <li>Design Consultation</li>
-                <li>Venue Styling</li>
-                <li>Floral Design</li>
-                <li>Lighting and Ambiance</li>
-                <li>Details and Accessories</li>
-            </ul>
+          <h2 class="h2 lg:text-[2.5vw] leading-none pb-3">
+            Transform Your Wedding with Exquisite Design and Decoration
+          </h2>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
+            reprehenderit unde quam fugiat eum ipsa nemo explicabo mollitia
+            veritatis quia iure nam sed labore totam dicta doloribus eaque,
+            consequatur illo vitae omnis vel cum. Maxime ut hic delectus error
+            quibusdam?
+          </p>
         </div>
+        <div class="">
+          <h2 class="h2 lg:text-[2.5vw] leading-none pb-3">
+            Our Services Include:
+          </h2>
+          <ul class="opacity-50" style="list-style-type: circle">
+            <li class="flex items-center gap-2">
+              <div class="h-4 w-4">
+                <img src="media/images/checked.png" alt="" />
+              </div>
+              Design Consultation
+            </li>
+            <li class="flex items-center gap-2">
+              <div class="h-4 w-4">
+                <img src="media/images/checked.png" alt="" />
+              </div>
+              Venue Styling
+            </li>
+            <li class="flex items-center gap-2">
+              <div class="h-4 w-4">
+                <img src="media/images/checked.png" alt="" />
+              </div>
+              Floral Design
+            </li>
+            <li class="flex items-center gap-2">
+              <div class="h-4 w-4">
+                <img src="media/images/checked.png" alt="" />
+              </div>
+              Lighting and Ambiance
+            </li>
+            <li class="flex items-center gap-2">
+              <div class="h-4 w-4">
+                <img src="media/images/checked.png" alt="" />
+              </div>
+              Details and Accessories
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="basis-[40%] overflow-hidden flex items-stretch">
+        <img
+          class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s] ease-out"
+          src="media/images/services.avif"
+          alt=""
+        />
+      </div>
     </div>
-    <div class="basis-[40%]"></div>
+    <div class="">
+      <h1 class="leading-none text-[#f68fa2] pt-15 pb-10 text-center h1">
+        Stunning Wedding Decor for Your Perfect Day
+      </h1>
+      <div class="">
+        <div
+          class="services__gallery grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+        >
+          <!-- Gallery Item 1 - Image Only -->
+          <a
+            href="media/images/services.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/services.avif"
+              alt="Wedding Decor"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 2 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Event Management"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 3 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Floral Design"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 4 - Image Only -->
+          <a
+            href="media/images/services.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/services.avif"
+              alt="Lighting"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 5 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Venue Styling"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 6 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Design Consultation"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 7 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Details"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 8 - Image Only -->
+          <a
+            href="media/images/services.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/services.avif"
+              alt="Complete Setup"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 9 - Image Only -->
+          <a
+            href="media/images/services.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/services.avif"
+              alt="Wedding Decor"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 10 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Event Management"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 11 - Image Only -->
+          <a
+            href="media/images/about.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/about.avif"
+              alt="Floral Design"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+          <!-- Gallery Item 12 - Image Only -->
+          <a
+            href="media/images/services.avif"
+            data-fancybox="services-gallery"
+            class="group aspect-square overflow-hidden block h-[280px] hover:cursor-pointer"
+          >
+            <img
+              src="media/images/services.avif"
+              alt="Lighting"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+            />
+          </a>
+
+        </div>
+      </div>
+    </div>
   </div>
-  
 </section>
+  // Check if Fancybox is available
+  if (typeof Fancybox !== 'undefined') {
+    // Initialize Fancybox with custom options - NO CAPTIONS
+    Fancybox.bind('[data-fancybox="services-gallery"]', {
+      // Options for the gallery
+      infinite: true,
+      hideScrollbar: false,
+      animated: true,
+      showClass: 'fancybox-fadeIn',
+      hideClass: 'fancybox-fadeOut',
+      
+      // Thumbnails options
+      Thumbs: {
+        autoStart: true,
+      },
+      
+      // Toolbar options - simplified
+      Toolbar: {
+        display: {
+          left: [],
+          middle: [],
+          right: ['close'],
+        },
+      },
+      
+      // Image options
+      Image: {
+        zoom: true,
+        click: 'toggleZoom',
+        wheel: 'slide',
+        zoomOpacity: 'auto',
+      },
+      
+      // NO CAPTIONS - Disable captions completely
+      caption: false,
+      
+      // Disable caption bar
+      Carousel: {
+        Navigation: false,
+      },
+      
+      // Remove any info display
+      on: {
+        reveal: (fancybox, slide) => {
+          // Remove any caption elements if they exist
+          const captionElement = document.querySelector('.fancybox__caption');
+          if (captionElement) {
+            captionElement.style.display = 'none';
+          }
+        }
+      }
+    });
+  }
+});
