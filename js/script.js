@@ -103,7 +103,8 @@ function handleHashRouting() {
     decor: "html/services.html",
     corporate: "html/services.html",
     gallery: "html/gallery.html",
-    blog: "html/blog.html", // Add if you have blog
+    blog: "html/blog.html",
+    contactContainer: "html/contactContainer.html",
   };
 
   if (map[hash]) {
@@ -349,7 +350,7 @@ function loadPage(page, scrollTop = true) {
         console.log("HTML content:", html.substring(0, 100) + "...");
         
         const doc = new DOMParser().parseFromString(html, "text/html");
-        const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page');
+        const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page, .contact-page');
         
         console.log("Found content with selector:", newContent);
         

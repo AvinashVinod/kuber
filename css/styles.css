@@ -1,5 +1,3 @@
-/* optimized.css - Performance Optimized Styles */
-
 /* ====== CRITICAL PERFORMANCE FIXES ====== */
 
 * {
@@ -183,6 +181,7 @@ h2, .h2 {
 }
 
 /* ====== SERVICES SECTION ====== */
+
 .service-card {
   position: relative;
   height: 450px;
