@@ -7,7 +7,7 @@ const BASE_PATH = window.location.pathname.includes("/kuber/")
 
 function asset(path) {
   const result = BASE_PATH + path.replace(/^\/+/, "");
-  // console.log("Asset path:", result);
+  console.log("Asset path:", result);
   return result;
 }
 
@@ -48,25 +48,25 @@ function loadComponentsParallel() {
   ];
 
   Promise.all(
-    components.map(c =>
+    components.map((c) =>
       fetch(c.url)
-        .then(res => {
+        .then((res) => {
           if (!res.ok) throw new Error(c.url);
           return res.text();
         })
-        .then(html => {
+        .then((html) => {
           const el = document.getElementById(c.id);
           if (el) el.innerHTML = html;
-        })
-    )
+        }),
+    ),
   )
     .then(() => {
-      // console.log("✅ All components loaded");
+      console.log("✅ All components loaded");
       fixAssets();
       initializeNavScripts();
       handleHashRouting();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("❌ Component load error:", err);
     });
 }
@@ -75,10 +75,10 @@ function loadComponentsParallel() {
    FIX IMG / SOURCE PATHS AFTER AJAX LOAD
 ===================================================== */
 function fixAssets() {
-  document.querySelectorAll("img, source").forEach(el => {
+  document.querySelectorAll("img, source").forEach((el) => {
     const src = el.getAttribute("src") || el.getAttribute("data-src");
     if (!src || src.startsWith("http") || src.startsWith(BASE_PATH)) return;
-    
+
     const newSrc = asset(src);
     if (el.tagName === "SOURCE") {
       el.setAttribute("srcset", newSrc);
@@ -93,7 +93,7 @@ function fixAssets() {
 ===================================================== */
 function handleHashRouting() {
   const hash = window.location.hash.replace("#", "");
-  
+
   console.log("Current hash:", hash);
 
   const map = {
@@ -104,14 +104,19 @@ function handleHashRouting() {
     corporate: "html/services.html",
     gallery: "html/gallery.html",
     blog: "html/blog.html",
-    contactContainer: "html/contactContainer.html",
+    "contact-us": "html/contactContainer.html",
   };
 
   if (map[hash]) {
     console.log("Loading page for hash:", hash);
     loadPage(map[hash], false);
-  } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact")) {
-    // Modified condition
+  } else if (
+    hash &&
+    !hash.startsWith("about") &&
+    !hash.startsWith("contact") &&
+    !hash.startsWith("gallery") &&
+    !hash.startsWith("blog")
+  ) {
     // Check if there's a stored page from before reload
     const stored = localStorage.getItem("currentPage");
     if (stored) {
@@ -131,7 +136,7 @@ function checkHashAndLoadPage() {
 function initializeNavScripts() {
   const navbar = document.getElementById("navbar");
   if (!navbar) {
-    console.error("Navbar not found");
+    console.error("❌ Navbar not found");
     return;
   }
 
@@ -152,10 +157,10 @@ function initializeNavScripts() {
   const modalIframe = document.getElementById("modal-iframe");
   const closeModal = document.getElementById("close-modal");
 
-  const ajaxLinks = document.querySelectorAll('.ajax-link');
-  const pageContent = document.getElementById('page-content');
+  const ajaxLinks = document.querySelectorAll(".ajax-link");
+  const pageContent = document.getElementById("page-content");
 
-  // console.log("Found ajax links:", ajaxLinks.length);
+  console.log("Found ajax links:", ajaxLinks.length);
 
   // Initial Burger State
   if (spans.length >= 3) {
@@ -171,9 +176,9 @@ function initializeNavScripts() {
       subNav?.classList.replace("top-[108%]", "top-[140%]");
 
       subNavLinks.forEach((link) =>
-        link.classList.add("hover:bg-black", "hover:text-white"),
+        link.classList.add("hover:bg-[#511730]", "hover:text-white"),
       );
-      servicesNavLink?.classList.add("hover:bg-black", "hover:text-white");
+      servicesNavLink?.classList.add("hover:bg-[#511730]", "hover:text-white");
       logo?.classList.replace(
         "logo__img--before-scroll",
         "logo__img--after-scroll",
@@ -204,9 +209,11 @@ function initializeNavScripts() {
       spans[1].style.opacity = "0";
       spans[2].style.transform = "translateY(0) rotate(-45deg)";
     } else {
-      spans[0].style.transform = "translateY(-10px) rotate(0deg) translateY(2px)";
+      spans[0].style.transform =
+        "translateY(-10px) rotate(0deg) translateY(2px)";
       spans[1].style.opacity = "1";
-      spans[2].style.transform = "translateY(10px) rotate(0deg) translateY(-2px)";
+      spans[2].style.transform =
+        "translateY(10px) rotate(0deg) translateY(-2px)";
       if (mobileSubNav) {
         mobileSubNav.style.maxHeight = "0px";
         mobileSubNav.style.opacity = "0";
@@ -264,21 +271,24 @@ function initializeNavScripts() {
   });
 
   // AJAX Navigation - THIS IS THE KEY PART!
-  ajaxLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
+  ajaxLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
       e.preventDefault();
-      
-      const targetPage = this.getAttribute('data-target');
-      const pageName = this.textContent.trim().toLowerCase().replace(/\s+/g, '-');
-      
+
+      const targetPage = this.getAttribute("data-target");
+      const pageName = this.textContent
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+
       console.log("🔵 Ajax link clicked!");
       console.log("   Text:", this.textContent.trim());
       console.log("   Target:", targetPage);
       console.log("   Hash will be:", pageName);
-      
+
       // Update hash
       window.location.hash = pageName;
-      
+
       // Load the page
       loadPage(targetPage, true);
 
@@ -290,25 +300,25 @@ function initializeNavScripts() {
   });
 
   // Handle HOME link clicks - works in both local (/kuber/) and production (/)
-  const homeLinks = document.querySelectorAll('.home-link');
-  homeLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
+  const homeLinks = document.querySelectorAll(".home-link");
+  homeLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
       e.preventDefault();
-      
+
       console.log("🏠 Home link clicked");
-      
+
       // Clear hash and stored page
-      window.location.hash = '';
-      localStorage.removeItem('currentPage');
-      localStorage.removeItem('currentHash');
-      
+      window.location.hash = "";
+      localStorage.removeItem("currentPage");
+      localStorage.removeItem("currentHash");
+
       // Reload to show home page
       window.location.href = BASE_PATH;
     });
   });
 
   // Handle hash changes (back/forward button)
-  window.addEventListener('hashchange', function() {
+  window.addEventListener("hashchange", function () {
     console.log("Hash changed to:", window.location.hash);
     checkHashAndLoadPage();
   });
@@ -339,45 +349,46 @@ function loadPage(page, scrollTop = true) {
   setTimeout(() => {
     const fullPath = asset(page);
     console.log("   Fetching:", fullPath);
-    
+
     fetch(fullPath + "?v=" + Date.now()) // Cache buster
-      .then(res => {
-        if (!res.ok) throw new Error("404 - " + fullPath);
+      .then((res) => {
+        if (!res.ok) throw new Error("404");
         return res.text();
       })
-      .then(html => {
+      .then((html) => {
         console.log("✅ Page loaded successfully");
-        console.log("HTML content:", html.substring(0, 100) + "...");
-        
+
         const doc = new DOMParser().parseFromString(html, "text/html");
-        const newContent = doc.querySelector('.services-page, .about-page, .gallery-page, .blog-page, .contact-page');
-        
-        console.log("Found content with selector:", newContent);
-        
+        const newContent = doc.querySelector(
+          ".services-page, .about-page, .gallery-page, .blog-page",
+        );
+
         if (newContent) {
           container.innerHTML = newContent.innerHTML;
         } else {
           console.warn("⚠️  No page wrapper found, using body");
           container.innerHTML = doc.body.innerHTML;
         }
-        
+
         fixAssets();
         initPageSpecificScripts();
-        
+
         // Fade in
         setTimeout(() => {
           container.style.opacity = "1";
-          
+
           // Re-init AOS
-          if (typeof AOS !== 'undefined') {
+          if (typeof AOS !== "undefined") {
             AOS.refresh();
           }
         }, 50);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("❌ Page load failed:", err);
         container.innerHTML =
-          "<div class='flex items-center justify-center p-10 text-center h-[100vh]'><h1 class='text-4xl'>Page not found</h1><p class='mt-4'>Could not load: " + page + "</p></div>";
+          "<div class='flex items-center justify-center p-10 text-center h-[100vh]'><h1 class='text-4xl'>Page not found</h1><p class='mt-4'>Could not load: " +
+          page +
+          "</p></div>";
         container.style.opacity = "1";
       });
   }, 300);
@@ -391,7 +402,7 @@ function initPageSpecificScripts() {
   const cards = document.querySelectorAll(".testimonial-card");
   const modal = document.getElementById("video-modal");
   const modalIframe = document.getElementById("modal-iframe");
-  
+
   if (cards.length > 0 && modal) {
     cards.forEach((card) => {
       card.addEventListener("click", () => {
@@ -409,7 +420,7 @@ function initPageSpecificScripts() {
       });
     });
   }
-  
+
   // Re-initialize Swiper if present
   initSwiper();
 }
@@ -418,7 +429,7 @@ function initPageSpecificScripts() {
    INIT AOS
 ===================================================== */
 function initAOS() {
-  if (typeof AOS !== 'undefined') {
+  if (typeof AOS !== "undefined") {
     AOS.init({
       duration: 800,
       easing: "ease-out",
@@ -433,16 +444,16 @@ function initAOS() {
    INIT SWIPER
 ===================================================== */
 function initSwiper() {
-  if (typeof Swiper === 'undefined') return;
-  
-  const swiperEl = document.querySelector('.story-swiper');
+  if (typeof Swiper === "undefined") return;
+
+  const swiperEl = document.querySelector(".story-swiper");
   if (!swiperEl) return;
-  
+
   // Destroy existing instance if any
   if (swiperEl.swiper) {
     swiperEl.swiper.destroy(true, true);
   }
-  
+
   new Swiper(".story-swiper", {
     loop: true,
     speed: 800,
@@ -464,58 +475,58 @@ function initSwiper() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if Fancybox is available
-  if (typeof Fancybox !== 'undefined') {
-    // Initialize Fancybox with custom options - NO CAPTIONS
+/* =====================================================
+   FANCYBOX
+===================================================== */
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof Fancybox !== "undefined") {
     Fancybox.bind('[data-fancybox="services-gallery"]', {
       // Options for the gallery
       infinite: true,
       hideScrollbar: false,
       animated: true,
-      showClass: 'fancybox-fadeIn',
-      hideClass: 'fancybox-fadeOut',
-      
+      showClass: "fancybox-fadeIn",
+      hideClass: "fancybox-fadeOut",
+
       // Thumbnails options
       Thumbs: {
         autoStart: true,
       },
-      
+
       // Toolbar options - simplified
       Toolbar: {
         display: {
           left: [],
           middle: [],
-          right: ['close'],
+          right: ["close"],
         },
       },
-      
+
       // Image options
       Image: {
         zoom: true,
-        click: 'toggleZoom',
-        wheel: 'slide',
-        zoomOpacity: 'auto',
+        click: "toggleZoom",
+        wheel: "slide",
+        zoomOpacity: "auto",
       },
-      
+
       // NO CAPTIONS - Disable captions completely
       caption: false,
-      
+
       // Disable caption bar
       Carousel: {
         Navigation: false,
       },
-      
+
       // Remove any info display
       on: {
         reveal: (fancybox, slide) => {
-          // Remove any caption elements if they exist
-          const captionElement = document.querySelector('.fancybox__caption');
+          const captionElement = document.querySelector(".fancybox__caption");
           if (captionElement) {
-            captionElement.style.display = 'none';
+            captionElement.style.display = "none";
           }
-        }
-      }
+        },
+      },
     });
   }
 });
