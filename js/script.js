@@ -188,10 +188,10 @@ function initializeNavScripts() {
       navList?.classList.replace("text-black", "text-white");
       subNav?.classList.replace("top-[140%]", "top-[108%]");
 
-      subNavLinks.forEach((link) =>
-        link.classList.remove("hover:bg-black", "hover:text-white"),
-      );
-      servicesNavLink?.classList.remove("hover:bg-black", "hover:text-white");
+      // subNavLinks.forEach((link) =>
+      //   link.classList.add("hover:bg-[#511730]", "hover:text-white"),
+      // );
+      // servicesNavLink?.classList.add("hover:bg-[#511730]", "hover:text-white");
       logo?.classList.replace(
         "logo__img--after-scroll",
         "logo__img--before-scroll",
@@ -373,6 +373,8 @@ function loadPage(page, scrollTop = true) {
         fixAssets();
         initPageSpecificScripts();
 
+        initAOS();
+
         // Fade in
         setTimeout(() => {
           container.style.opacity = "1";
@@ -428,16 +430,28 @@ function initPageSpecificScripts() {
 /* =====================================================
    INIT AOS
 ===================================================== */
+/* =====================================================
+   INIT AOS (Improved for AJAX)
+===================================================== */
 function initAOS() {
-  if (typeof AOS !== "undefined") {
-    AOS.init({
-      duration: 800,
-      easing: "ease-out",
-      once: false,
-      offset: 100,
-      delay: 0,
-    });
-  }
+  if (typeof AOS === "undefined") return;
+
+  const items = document.querySelectorAll(".gallery-item");
+  items.forEach((item, index) => {
+    if (!item.hasAttribute("data-aos")) {
+       item.setAttribute("data-aos", "fade-up");
+       item.setAttribute("data-aos-delay", (index % 8) * 100); 
+    }
+  });
+
+  AOS.init({
+    duration: 800,
+    easing: "ease-out-cubic",
+    once: true,
+    offset: 50,
+  });
+
+  AOS.refresh();
 }
 
 /* =====================================================
