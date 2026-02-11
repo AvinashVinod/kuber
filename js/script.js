@@ -400,6 +400,9 @@ function loadPage(page, scrollTop = true) {
    PAGE-SPECIFIC SCRIPTS
 ===================================================== */
 function initPageSpecificScripts() {
+  // 1. Run your blog renderer
+  renderBlogs();
+
   // Re-initialize video modals
   const cards = document.querySelectorAll(".testimonial-card");
   const modal = document.getElementById("video-modal");
@@ -544,3 +547,166 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+// =====================================================
+// RenderBlogs() and Pagination logic
+// =====================================================
+
+let currentBlogPage = 1;
+const ITEMS_PER_PAGE = 12;
+
+const blogData = [
+  { title: "Seasonal Flower Guide",   subtitle: "Crafting your perfect floral palette",   img: "./media/images/wedding.avif" },
+  { title: "Spring Blooms",           subtitle: "Fresh starts and vibrant colors",         img: "./media/images/wedding.avif" },
+  { title: "Winter Elegance",         subtitle: "Classic whites andqorhqwpehrqpwehrpqhrpqph deep greens",          img: "./media/images/wedding.avif" },
+  { title: "The Art of Bouquets",     subtitle: "Arranging like a professional",           img: "./media/images/wedding.avif" },
+  { title: "Sustainable Gardening",   subtitle: "Eco-friendly floral tips",                img: "./media/images/wedding.avif" },
+  { title: "Romantic Roses",          subtitle: "The timeless symbol of love",             img: "./media/images/wedding.avif" },
+  { title: "Wildflower Magic",        subtitle: "Bringing the meadow home",                img: "./media/images/wedding.avif" },
+  { title: "Tropical Vibes",          subtitle: "Exotic plants for bright spaces",         img: "./media/images/wedding.avif" },
+  { title: "Caring for Lilies",       subtitle: "Fragrance that lasts weeks",              img: "./media/images/wedding.avif" },
+  { title: "Dried Flower Decor",      subtitle: "Preserving beauty forever",               img: "./media/images/wedding.avif" },
+  { title: "Wedding Centerpieces",    subtitle: "Making your big day pop",                 img: "./media/images/wedding.avif" },
+  { title: "Orchid Essentials",       subtitle: "Mastering the delicate orchid",           img: "./media/images/wedding.avif" },
+  { title: "Autumn Harvest",          subtitle: "Warm tones and rustic textures",          img: "./media/images/wedding.avif" },
+  { title: "Balcony Gardening",       subtitle: "Small spaces, big blooms",                img: "./media/images/wedding.avif" },
+  { title: "Floral Scents",           subtitle: "Natural aromatherapy tips",               img: "./media/images/wedding.avif" },
+  { title: "DIY Flower Crowns",       subtitle: "The ultimate festival accessory",         img: "./media/images/wedding.avif" },
+  { title: "Succulent Styling",       subtitle: "Low maintenance, high style",             img: "./media/images/wedding.avif" },
+  { title: "Pet-Safe Plants",         subtitle: "Keep your furry friends happy",           img: "./media/images/wedding.avif" },
+    { title: "Seasonal Flower Guide",   subtitle: "Crafting your perfect floral palette",   img: "./media/images/wedding.avif" },
+  { title: "Spring Blooms",           subtitle: "Fresh starts and vibrant colors",         img: "./media/images/wedding.avif" },
+  { title: "Winter Elegance",         subtitle: "Classic whites and deep greens",          img: "./media/images/wedding.avif" },
+  { title: "The Art of Bouquets",     subtitle: "Arranging like a professional",           img: "./media/images/wedding.avif" },
+  { title: "Sustainable Gardening",   subtitle: "Eco-friendly floral tips",                img: "./media/images/wedding.avif" },
+  { title: "Romantic Roses",          subtitle: "The timeless symbol of love",             img: "./media/images/wedding.avif" },
+  { title: "Wildflower Magic",        subtitle: "Bringing the meadow home",                img: "./media/images/wedding.avif" },
+  { title: "Tropical Vibes",          subtitle: "Exotic plants for bright spaces",         img: "./media/images/wedding.avif" },
+  { title: "Caring for Lilies",       subtitle: "Fragrance that lasts weeks",              img: "./media/images/wedding.avif" },
+  { title: "Dried Flower Decor",      subtitle: "Preserving beauty forever",               img: "./media/images/wedding.avif" },
+  { title: "Wedding Centerpieces",    subtitle: "Making your big day pop",                 img: "./media/images/wedding.avif" },
+  { title: "Orchid Essentials",       subtitle: "Mastering the delicate orchid",           img: "./media/images/wedding.avif" },
+  { title: "Autumn Harvest",          subtitle: "Warm tones and rustic textures",          img: "./media/images/wedding.avif" },
+  { title: "Balcony Gardening",       subtitle: "Small spaces, big blooms",                img: "./media/images/wedding.avif" },
+  { title: "Floral Scents",           subtitle: "Natural aromatherapy tips",               img: "./media/images/wedding.avif" },
+  { title: "DIY Flower Crowns",       subtitle: "The ultimate festival accessory",         img: "./media/images/wedding.avif" },
+  { title: "Succulent Styling",       subtitle: "Low maintenance, high style",             img: "./media/images/wedding.avif" },
+  { title: "Pet-Safe Plants",         subtitle: "Keep your furry friends happy",           img: "./media/images/wedding.avif" },
+];
+
+// Called on fresh blog page load — resets to page 1
+function renderBlogs() {
+  currentBlogPage = 1;
+  renderBlogPage();
+}
+
+// Renders cards + pagination for currentBlogPage
+function renderBlogPage() {
+  const blogContainer = document.querySelector(".blogs");
+  const paginationContainer = document.querySelector(".blog-pagination");
+  if (!blogContainer) return;
+
+  const totalPages = Math.ceil(blogData.length / ITEMS_PER_PAGE);
+  const start = (currentBlogPage - 1) * ITEMS_PER_PAGE;
+  const slice = blogData.slice(start, start + ITEMS_PER_PAGE);
+
+  // ── Render Cards ──────────────────────────────────
+  blogContainer.innerHTML = slice.map(blog => `
+    <div class="blog group w-[290px] bg-white rounded-xl overflow-hidden shadow-2xl transition-transform duration-500 hover:-translate-y-2 cursor-pointer">
+      <div class="h-64 overflow-hidden">
+        <img src="${blog.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${blog.title}">
+      </div>
+      <div class="flex flex-col justify-between h-[190px]">
+        <div class="p-6 pb-0 flex flex-col h-fit justify-between">
+          <div>
+            <h3 class="text-xl font-medium text-gray-900 leading-tight mb-2">${blog.title}</h3>
+            <p class="text-sm text-gray-500 mb-6 line-clamp-2">${blog.subtitle}</p>
+          </div>
+        </div>
+        <a href="#" class="m-6 mt-0 p-3 inline-block text-center bg-[#F68FA2] text-white rounded-lg text-xs tracking-widest uppercase transition-all group-hover:bg-[#511730]">
+          Read More
+        </a>
+      </div>
+    </div>
+  `).join("");
+
+  // ── Render Pagination ─────────────────────────────
+  if (!paginationContainer) return;
+
+  // Build page number buttons
+  let pageButtons = "";
+  for (let i = 1; i <= totalPages; i++) {
+    const isActive = i === currentBlogPage;
+    pageButtons += `
+      <button
+        data-page="${i}"
+        class="page-btn w-10 h-10 flex items-center justify-center rounded-full font-medium transition-all
+          ${isActive
+            ? "bg-[#F68FA2] text-white shadow-lg shadow-[#F68FA2]/30"
+            : "text-white/60 hover:text-white hover:bg-white/10"
+          }"
+      >${i}</button>
+    `;
+  }
+
+  paginationContainer.innerHTML = `
+    <!-- Prev -->
+    <button
+      id="blog-prev"
+      class="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center
+             hover:bg-[#F68FA2] hover:border-[#F68FA2] transition-all
+             ${currentBlogPage === 1 ? "opacity-30 pointer-events-none" : ""}"
+    >
+      <span class="sr-only">Previous</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <!-- Page Numbers -->
+    <div class="flex items-center space-x-2">
+      ${pageButtons}
+    </div>
+
+    <!-- Next -->
+    <button
+      id="blog-next"
+      class="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center
+             hover:bg-[#F68FA2] hover:border-[#F68FA2] transition-all
+             ${currentBlogPage === totalPages ? "opacity-30 pointer-events-none" : ""}"
+    >
+      <span class="sr-only">Next</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  `;
+
+  // ── Wire up events ─────────────────────────────────
+  paginationContainer.querySelectorAll(".page-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentBlogPage = parseInt(btn.getAttribute("data-page"));
+      renderBlogPage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+
+  document.getElementById("blog-prev")?.addEventListener("click", () => {
+    if (currentBlogPage > 1) {
+      currentBlogPage--;
+      renderBlogPage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  document.getElementById("blog-next")?.addEventListener("click", () => {
+    if (currentBlogPage < totalPages) {
+      currentBlogPage++;
+      renderBlogPage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  fixAssets();
+  if (typeof AOS !== "undefined") AOS.refresh();
+}
