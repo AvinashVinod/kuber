@@ -103,7 +103,7 @@ function handleHashRouting() {
     decor: "html/services.html",
     corporate: "html/services.html",
     gallery: "html/gallery.html",
-    blog: "html/blog.html",
+    blog: "html/blogs.html",
     "contact-us": "html/contactContainer.html",
   };
 
@@ -115,7 +115,7 @@ function handleHashRouting() {
     !hash.startsWith("about") &&
     !hash.startsWith("contact") &&
     !hash.startsWith("gallery") &&
-    !hash.startsWith("blog")
+    !hash.startsWith("blogs")
   ) {
     // Check if there's a stored page from before reload
     const stored = localStorage.getItem("currentPage");
@@ -360,7 +360,7 @@ function loadPage(page, scrollTop = true) {
 
         const doc = new DOMParser().parseFromString(html, "text/html");
         const newContent = doc.querySelector(
-          ".services-page, .about-page, .gallery-page, .blog-page",
+          ".services-page, .about-page, .gallery-page, .blogs-page",
         );
 
         if (newContent) {
@@ -556,7 +556,7 @@ let currentBlogPage = 1;
 const ITEMS_PER_PAGE = 12;
 
 const blogData = [
-  { title: "Seasonal Flower Guide",   subtitle: "Crafting your perfect floral palette",   img: "./media/images/wedding.avif" },
+  { title: "Seasonal Flower Guide kfhqewpifhpqewhripqewhrpqhrpqwhrpqw uohqwprhqpwhrqwrqpwrhqpwrh",   subtitle: "Crafting your perfect floral palette",   img: "./media/images/wedding.avif" },
   { title: "Spring Blooms",           subtitle: "Fresh starts and vibrant colors",         img: "./media/images/wedding.avif" },
   { title: "Winter Elegance",         subtitle: "Classic whites andqorhqwpehrqpwehrpqhrpqph deep greens",          img: "./media/images/wedding.avif" },
   { title: "The Art of Bouquets",     subtitle: "Arranging like a professional",           img: "./media/images/wedding.avif" },
@@ -611,21 +611,30 @@ function renderBlogPage() {
   const slice = blogData.slice(start, start + ITEMS_PER_PAGE);
 
   // ── Render Cards ──────────────────────────────────
-  blogContainer.innerHTML = slice.map(blog => `
-    <div class="blog group w-[290px] bg-white rounded-xl overflow-hidden shadow-2xl transition-transform duration-500 hover:-translate-y-2 cursor-pointer">
-      <div class="h-64 overflow-hidden">
+// Inside renderBlogPage() function, update the mapping:
+
+blogContainer.innerHTML = slice.map(blog => `
+    <div class="blog-card-item blog group w-[290px] bg-white border-2 border-[#D2B194] rounded-xl overflow-hidden shadow-2xl transition-transform duration-500 hover:-translate-y-2 cursor-pointer" 
+         data-target="/html/blog.html"> <div class="h-64 overflow-hidden">
         <img src="${blog.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${blog.title}">
       </div>
       <div class="flex flex-col justify-between h-[190px]">
         <div class="p-6 pb-0 flex flex-col h-fit justify-between">
           <div>
-            <h3 class="text-xl font-medium text-gray-900 leading-tight mb-2">${blog.title}</h3>
+            <h3 class="text-xl font-medium text-gray-900 leading-tight mb-2 line-clamp-1">${blog.title}</h3>
             <p class="text-sm text-gray-500 mb-6 line-clamp-2">${blog.subtitle}</p>
           </div>
         </div>
-        <a href="#" class="m-6 mt-0 p-3 inline-block text-center bg-[#F68FA2] text-white rounded-lg text-xs tracking-widest uppercase transition-all group-hover:bg-[#511730]">
+        <div class="flex items-center justify-between m-6 mt-0 p-3 bg-[#D2B194] text-white rounded-lg text-xs tracking-widest uppercase transition-all group-hover:bg-[#511730]">
           Read More
-        </a>
+          <div class="px-[0.42rem] py-1 rounded-full bg-[#511730] group-hover:bg-[#D2B194]">
+            <span class="transition-transform duration-300 h-2.5 w-2.5 inline-block ">
+              <svg fill="#FFFFFF" width="100%" height="100%" viewBox="0 -6 524 524" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="150.46 478 129.86 456.5 339.11 256 129.86 55.49 150.46 34 382.14 256 150.46 478" stroke="#FFFFFF" stroke-width="40" />
+              </svg>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   `).join("");
@@ -709,4 +718,16 @@ function renderBlogPage() {
 
   fixAssets();
   if (typeof AOS !== "undefined") AOS.refresh();
+
+blogContainer.querySelectorAll(".blog-card-item").forEach(card => {
+    card.addEventListener("click", () => {
+        const target = card.getAttribute("data-target");
+        
+        // Update hash for browser history
+        window.location.hash = "blog-details"; 
+        
+        // Use your existing AJAX loader
+        loadPage(target, true);
+    });
+});
 }
