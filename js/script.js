@@ -400,8 +400,34 @@ function loadPage(page, scrollTop = true) {
    PAGE-SPECIFIC SCRIPTS
 ===================================================== */
 function initPageSpecificScripts() {
-  // 1. Run your blog renderer
+  // Run your blog renderer
   renderBlogs();
+
+  // Initialize FAQ Accordions (Exclusive Toggle)
+  const faqButtons = document.querySelectorAll('.faq-button');
+  if (faqButtons.length > 0) {
+    faqButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const faqItem = button.parentElement;
+        const content = faqItem.querySelector('.faq-content');
+        const arrow = button.querySelector('.arrow-icon');
+        const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+        // Close all other open items
+        document.querySelectorAll('.faq-content').forEach(otherContent => {
+          otherContent.style.maxHeight = '0px';
+          const otherArrow = otherContent.parentElement.querySelector('.arrow-icon');
+          if(otherArrow) otherArrow.style.transform = 'rotate(0deg)';
+        });
+
+        // If the clicked item wasn't open, open it
+        if (!isOpen) {
+          content.style.maxHeight = content.scrollHeight + "px";
+          arrow.style.transform = 'rotate(180deg)';
+        }
+      });
+    });
+  }
 
   // Re-initialize video modals
   const cards = document.querySelectorAll(".testimonial-card");
