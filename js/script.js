@@ -17,20 +17,13 @@ function asset(path) {
 document.addEventListener("DOMContentLoaded", () => {
   debugLogo();
   loadComponentsParallel();
-  initAOS();
   initSwiper();
 });
 
-/* =====================================================
-   LOGO DEBUG
-===================================================== */
 function debugLogo() {
   const logo = document.querySelector('img[src*="logo"]');
   if (!logo) return;
-
   console.log("Logo src:", logo.src);
-  console.log("Page URL:", window.location.href);
-
   const img = new Image();
   img.onload = () => console.log("✅ Logo loads");
   img.onerror = () => console.error("❌ Logo fails");
@@ -65,20 +58,17 @@ function loadComponentsParallel() {
       fixAssets();
       initializeNavScripts();
       handleHashRouting();
+      initAOS();
     })
     .catch((err) => {
       console.error("❌ Component load error:", err);
     });
 }
 
-/* =====================================================
-   FIX IMG / SOURCE PATHS AFTER AJAX LOAD
-===================================================== */
 function fixAssets() {
   document.querySelectorAll("img, source").forEach((el) => {
     const src = el.getAttribute("src") || el.getAttribute("data-src");
     if (!src || src.startsWith("http") || src.startsWith(BASE_PATH)) return;
-
     const newSrc = asset(src);
     if (el.tagName === "SOURCE") {
       el.setAttribute("srcset", newSrc);
@@ -93,9 +83,7 @@ function fixAssets() {
 ===================================================== */
 function handleHashRouting() {
   const hash = window.location.hash.replace("#", "");
-
   console.log("Current hash:", hash);
-
   const map = {
     services: "html/services.html",
     wedding: "html/services.html",
@@ -110,14 +98,7 @@ function handleHashRouting() {
   if (map[hash]) {
     console.log("Loading page for hash:", hash);
     loadPage(map[hash], false);
-  } else if (
-    hash &&
-    !hash.startsWith("about") &&
-    !hash.startsWith("contact") &&
-    !hash.startsWith("gallery") &&
-    !hash.startsWith("blogs")
-  ) {
-    // Check if there's a stored page from before reload
+  } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact") && !hash.startsWith("gallery") && !hash.startsWith("blogs")) {
     const stored = localStorage.getItem("currentPage");
     if (stored) {
       console.log("Restoring stored page:", stored);
@@ -128,6 +109,71 @@ function handleHashRouting() {
 
 function checkHashAndLoadPage() {
   handleHashRouting();
+}
+
+/* =====================================================
+   🔥 FIXED: INIT AOS FOR AJAX NAVIGATION
+===================================================== */
+function initAOS() {
+  if (typeof AOS === "undefined") {
+    console.warn("AOS not loaded yet - retrying in 500ms");
+    setTimeout(initAOS, 500);
+    return;
+  }
+
+  console.log("🎬 Initializing AOS...");
+
+  // 🔥 CRITICAL FIX 1: Remove ALL AOS classes from ALL elements
+  document.querySelectorAll('[data-aos]').forEach(el => {
+    el.classList.remove('aos-init', 'aos-animate');
+    // Reset inline styles that AOS might have added
+    el.style.transform = '';
+    el.style.opacity = '';
+  });
+
+  // 🔥 CRITICAL FIX 2: Add data-aos to elements that need animation
+  const items = document.querySelectorAll(".gallery-item, .about-page [data-aos], .services-page [data-aos]");
+  console.log(`Found ${items.length} items to animate`);
+  
+  items.forEach((item, index) => {
+    if (!item.hasAttribute("data-aos")) {
+      item.setAttribute("data-aos", "fade-up");
+      item.setAttribute("data-aos-delay", (index % 4) * 100);
+    }
+  });
+
+  // 🔥 CRITICAL FIX 3: Initialize with once: false for AJAX
+  AOS.init({
+    duration: 800,
+    easing: "ease-out-cubic",
+    once: false,  // 🔥 MUST BE FALSE for AJAX pages
+    offset: 50,
+    disable: false,
+    startEvent: 'load',
+    initClassName: 'aos-init',
+    animatedClassName: 'aos-animate',
+    useClassNames: false,
+    disableMutationObserver: false,
+    debounceDelay: 50,
+    throttleDelay: 99,
+    mirror: false,
+  });
+
+  // 🔥 CRITICAL FIX 4: Multiple refresh cycles with delays
+  setTimeout(() => {
+    AOS.refresh();
+    console.log("✅ AOS refreshed (1/3) - Elements:", document.querySelectorAll('[data-aos]').length);
+  }, 50);
+
+  setTimeout(() => {
+    AOS.refresh();
+    console.log("✅ AOS refreshed (2/3)");
+  }, 150);
+
+  setTimeout(() => {
+    AOS.refresh();
+    console.log("✅ AOS refreshed (3/3 - final)");
+  }, 300);
 }
 
 /* =====================================================
@@ -145,75 +191,51 @@ function initializeNavScripts() {
   const servicesNavLink = document.querySelector(".services__nav-link");
   const logo = navbar.querySelector(".logo__img");
   const navList = navbar.querySelector("ul");
-
   const menuBtn = document.getElementById("menu-btn");
   const mobileMenu = document.getElementById("mobile-menu");
   const spans = menuBtn?.querySelectorAll("span") || [];
   const servicesToggle = document.getElementById("mobile-services-toggle");
   const mobileSubNav = document.getElementById("mobile-sub-nav");
   const servicesArrow = document.getElementById("services-arrow");
-
   const modal = document.getElementById("video-modal");
   const modalIframe = document.getElementById("modal-iframe");
   const closeModal = document.getElementById("close-modal");
-
   const ajaxLinks = document.querySelectorAll(".ajax-link");
-  const pageContent = document.getElementById("page-content");
 
   console.log("Found ajax links:", ajaxLinks.length);
 
-  // Initial Burger State
   if (spans.length >= 3) {
     spans[0].style.transform = "translateY(-8px)";
     spans[2].style.transform = "translateY(8px)";
   }
 
-  // Desktop Scroll Logic
   window.onscroll = function () {
     if (window.scrollY > 50) {
       navbar.classList.add("bg-white", "shadow-lg", "px-4");
       navList?.classList.replace("text-white", "text-black");
       subNav?.classList.replace("top-[108%]", "top-[140%]");
-
-      subNavLinks.forEach((link) =>
-        link.classList.add("hover:bg-[#511730]", "hover:text-white"),
-      );
+      subNavLinks.forEach((link) => link.classList.add("hover:bg-[#511730]", "hover:text-white"));
       servicesNavLink?.classList.add("hover:bg-[#511730]", "hover:text-white");
-      logo?.classList.replace(
-        "logo__img--before-scroll",
-        "logo__img--after-scroll",
-      );
+      logo?.classList.replace("logo__img--before-scroll", "logo__img--after-scroll");
     } else {
       navbar.classList.remove("bg-white", "shadow-lg", "px-4");
       navList?.classList.replace("text-black", "text-white");
       subNav?.classList.replace("top-[140%]", "top-[108%]");
-
-      // subNavLinks.forEach((link) =>
-      //   link.classList.add("hover:bg-[#511730]", "hover:text-white"),
-      // );
-      // servicesNavLink?.classList.add("hover:bg-[#511730]", "hover:text-white");
-      logo?.classList.replace(
-        "logo__img--after-scroll",
-        "logo__img--before-scroll",
-      );
+      logo?.classList.replace("logo__img--after-scroll", "logo__img--before-scroll");
     }
   };
 
-  // Hamburger Toggle
   menuBtn?.addEventListener("click", () => {
     mobileMenu?.classList.toggle("translate-y-0");
     const isMenuOpening = mobileMenu?.classList.contains("translate-y-0");
-
     if (isMenuOpening) {
       spans[0].style.transform = "translateY(0) rotate(45deg)";
       spans[1].style.opacity = "0";
       spans[2].style.transform = "translateY(0) rotate(-45deg)";
     } else {
-      spans[0].style.transform =
-        "translateY(-10px) rotate(0deg) translateY(2px)";
+      spans[0].style.transform = "translateY(-10px) rotate(0deg) translateY(2px)";
       spans[1].style.opacity = "1";
-      spans[2].style.transform =
-        "translateY(10px) rotate(0deg) translateY(-2px)";
+      spans[2].style.transform = "translateY(10px) rotate(0deg) translateY(-2px)";
       if (mobileSubNav) {
         mobileSubNav.style.maxHeight = "0px";
         mobileSubNav.style.opacity = "0";
@@ -221,33 +243,30 @@ function initializeNavScripts() {
     }
   });
 
-  // Mobile Accordion
   servicesToggle?.addEventListener("click", (e) => {
     e.preventDefault();
-    const isOpen =
-      mobileSubNav?.style.maxHeight && mobileSubNav.style.maxHeight !== "0px";
+    const parentLi = servicesToggle.closest('.mobile-link-container');
+    const isOpen = mobileSubNav?.style.maxHeight && mobileSubNav.style.maxHeight !== "0px";
     if (isOpen) {
       mobileSubNav.style.maxHeight = "0px";
       mobileSubNav.style.opacity = "0";
       if (servicesArrow) servicesArrow.style.transform = "rotate(0deg)";
+      parentLi.classList.remove('text-[#ca8a04]');
     } else {
       mobileSubNav.style.maxHeight = mobileSubNav.scrollHeight + "px";
       mobileSubNav.style.opacity = "1";
       if (servicesArrow) servicesArrow.style.transform = "rotate(180deg)";
+      parentLi.classList.add('text-[#ca8a04]');
     }
   });
 
-  // Video Modal Functionality
   const cards = document.querySelectorAll(".testimonial-card");
   cards.forEach((card) => {
     card.addEventListener("click", () => {
       const videoId = card.getAttribute("data-video-id");
-      const currentOrigin = window.location.origin;
-
       if (modalIframe) {
-        modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+        modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`;
       }
-
       modal?.classList.remove("hidden");
       modal?.classList.add("flex");
       setTimeout(() => modal?.classList.add("opacity-100"), 10);
@@ -270,62 +289,36 @@ function initializeNavScripts() {
     if (e.target === modal) closeFunction();
   });
 
-  // AJAX Navigation - THIS IS THE KEY PART!
   ajaxLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
-
       const targetPage = this.getAttribute("data-target");
-      const pageName = this.textContent
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, "-");
-
-      console.log("🔵 Ajax link clicked!");
-      console.log("   Text:", this.textContent.trim());
-      console.log("   Target:", targetPage);
-      console.log("   Hash will be:", pageName);
-
-      // Update hash
+      const pageName = this.textContent.trim().toLowerCase().replace(/\s+/g, "-");
+      console.log("🔵 Ajax link clicked:", pageName);
       window.location.hash = pageName;
-
-      // Load the page
       loadPage(targetPage, true);
-
-      // Close mobile menu if open
       if (mobileMenu?.classList.contains("translate-y-0")) {
         menuBtn?.click();
       }
     });
   });
 
-  // Handle HOME link clicks - works in both local (/kuber/) and production (/)
   const homeLinks = document.querySelectorAll(".home-link");
   homeLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
-
       console.log("🏠 Home link clicked");
-
-      // Clear hash and stored page
       window.location.hash = "";
       localStorage.removeItem("currentPage");
-      localStorage.removeItem("currentHash");
-
-      // Reload to show home page
       window.location.href = BASE_PATH;
     });
   });
 
-  // Handle hash changes (back/forward button)
-  window.addEventListener("hashchange", function () {
-    console.log("Hash changed to:", window.location.hash);
-    checkHashAndLoadPage();
-  });
+  window.addEventListener("hashchange", checkHashAndLoadPage);
 }
 
 /* =====================================================
-   LOAD PAGE (AJAX)
+   🔥 FIXED: LOAD PAGE WITH PROPER AOS HANDLING
 ===================================================== */
 function loadPage(page, scrollTop = true) {
   const container = document.getElementById("page-content");
@@ -335,14 +328,12 @@ function loadPage(page, scrollTop = true) {
   }
 
   console.log("📄 Loading page:", page);
-
   localStorage.setItem("currentPage", page);
 
   if (scrollTop) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Fade out
   container.style.transition = "opacity 0.3s ease";
   container.style.opacity = "0";
 
@@ -350,7 +341,7 @@ function loadPage(page, scrollTop = true) {
     const fullPath = asset(page);
     console.log("   Fetching:", fullPath);
 
-    fetch(fullPath + "?v=" + Date.now()) // Cache buster
+    fetch(fullPath + "?v=" + Date.now())
       .then((res) => {
         if (!res.ok) throw new Error("404");
         return res.text();
@@ -359,9 +350,7 @@ function loadPage(page, scrollTop = true) {
         console.log("✅ Page loaded successfully");
 
         const doc = new DOMParser().parseFromString(html, "text/html");
-        const newContent = doc.querySelector(
-          ".services-page, .about-page, .gallery-page, .blogs-page",
-        );
+        const newContent = doc.querySelector(".services-page, .about-page, .gallery-page, .blogs-page");
 
         if (newContent) {
           container.innerHTML = newContent.innerHTML;
@@ -373,24 +362,20 @@ function loadPage(page, scrollTop = true) {
         fixAssets();
         initPageSpecificScripts();
 
-        initAOS();
-
-        // Fade in
+        // 🔥 CRITICAL: Wait for DOM to be ready, then init AOS
         setTimeout(() => {
           container.style.opacity = "1";
-
-          // Re-init AOS
-          if (typeof AOS !== "undefined") {
-            AOS.refresh();
-          }
+          
+          // Initialize AOS after fade-in begins
+          setTimeout(() => {
+            console.log("🎬 Calling initAOS after page load...");
+            initAOS();
+          }, 100);
         }, 50);
       })
       .catch((err) => {
         console.error("❌ Page load failed:", err);
-        container.innerHTML =
-          "<div class='flex items-center justify-center p-10 text-center h-[100vh]'><h1 class='text-4xl'>Page not found</h1><p class='mt-4'>Could not load: " +
-          page +
-          "</p></div>";
+        container.innerHTML = "<div class='flex items-center justify-center p-10 text-center h-[100vh]'><h1 class='text-4xl'>Page not found</h1></div>";
         container.style.opacity = "1";
       });
   }, 300);
@@ -400,10 +385,8 @@ function loadPage(page, scrollTop = true) {
    PAGE-SPECIFIC SCRIPTS
 ===================================================== */
 function initPageSpecificScripts() {
-  // Run your blog renderer
   renderBlogs();
 
-  // Initialize FAQ Accordions (Exclusive Toggle)
   const faqButtons = document.querySelectorAll('.faq-button');
   if (faqButtons.length > 0) {
     faqButtons.forEach(button => {
@@ -413,14 +396,12 @@ function initPageSpecificScripts() {
         const arrow = button.querySelector('.arrow-icon');
         const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
 
-        // Close all other open items
         document.querySelectorAll('.faq-content').forEach(otherContent => {
           otherContent.style.maxHeight = '0px';
           const otherArrow = otherContent.parentElement.querySelector('.arrow-icon');
           if(otherArrow) otherArrow.style.transform = 'rotate(0deg)';
         });
 
-        // If the clicked item wasn't open, open it
         if (!isOpen) {
           content.style.maxHeight = content.scrollHeight + "px";
           arrow.style.transform = 'rotate(180deg)';
@@ -429,21 +410,16 @@ function initPageSpecificScripts() {
     });
   }
 
-  // Re-initialize video modals
   const cards = document.querySelectorAll(".testimonial-card");
   const modal = document.getElementById("video-modal");
   const modalIframe = document.getElementById("modal-iframe");
-
   if (cards.length > 0 && modal) {
     cards.forEach((card) => {
       card.addEventListener("click", () => {
         const videoId = card.getAttribute("data-video-id");
-        const currentOrigin = window.location.origin;
-
         if (modalIframe) {
-          modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+          modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`;
         }
-
         modal.classList.remove("hidden");
         modal.classList.add("flex");
         setTimeout(() => modal.classList.add("opacity-100"), 10);
@@ -452,124 +428,34 @@ function initPageSpecificScripts() {
     });
   }
 
-  // Re-initialize Swiper if present
   initSwiper();
 }
 
-/* =====================================================
-   INIT AOS
-===================================================== */
-/* =====================================================
-   INIT AOS (Improved for AJAX)
-===================================================== */
-function initAOS() {
-  if (typeof AOS === "undefined") return;
-
-  const items = document.querySelectorAll(".gallery-item");
-  items.forEach((item, index) => {
-    if (!item.hasAttribute("data-aos")) {
-       item.setAttribute("data-aos", "fade-up");
-       item.setAttribute("data-aos-delay", (index % 8) * 100); 
-    }
-  });
-
-  AOS.init({
-    duration: 800,
-    easing: "ease-out-cubic",
-    once: true,
-    offset: 50,
-  });
-
-  AOS.refresh();
-}
-
-/* =====================================================
-   INIT SWIPER
-===================================================== */
 function initSwiper() {
   if (typeof Swiper === "undefined") return;
-
   const swiperEl = document.querySelector(".story-swiper");
   if (!swiperEl) return;
-
-  // Destroy existing instance if any
   if (swiperEl.swiper) {
     swiperEl.swiper.destroy(true, true);
   }
-
   new Swiper(".story-swiper", {
     loop: true,
     speed: 800,
-    autoplay: {
-      delay: 4000,
-      disableOnInteraction: false,
-    },
+    autoplay: { delay: 4000, disableOnInteraction: false },
     effect: "coverflow",
     grabCursor: true,
     centeredSlides: true,
     slidesPerView: "auto",
-    coverflowEffect: {
-      rotate: 5,
-      stretch: 0,
-      depth: 100,
-      modifier: 2,
-      slideShadows: false,
-    },
+    coverflowEffect: { rotate: 5, stretch: 0, depth: 100, modifier: 2, slideShadows: false },
   });
 }
 
-/* =====================================================
-   FANCYBOX
-===================================================== */
 document.addEventListener("DOMContentLoaded", function () {
   if (typeof Fancybox !== "undefined") {
     Fancybox.bind('[data-fancybox="services-gallery"]', {
-      // Options for the gallery
       infinite: true,
-      hideScrollbar: false,
-      animated: true,
-      showClass: "fancybox-fadeIn",
-      hideClass: "fancybox-fadeOut",
-
-      // Thumbnails options
-      Thumbs: {
-        autoStart: true,
-      },
-
-      // Toolbar options - simplified
-      Toolbar: {
-        display: {
-          left: [],
-          middle: [],
-          right: ["close"],
-        },
-      },
-
-      // Image options
-      Image: {
-        zoom: true,
-        click: "toggleZoom",
-        wheel: "slide",
-        zoomOpacity: "auto",
-      },
-
-      // NO CAPTIONS - Disable captions completely
       caption: false,
-
-      // Disable caption bar
-      Carousel: {
-        Navigation: false,
-      },
-
-      // Remove any info display
-      on: {
-        reveal: (fancybox, slide) => {
-          const captionElement = document.querySelector(".fancybox__caption");
-          if (captionElement) {
-            captionElement.style.display = "none";
-          }
-        },
-      },
+      Carousel: { Navigation: false },
     });
   }
 });
@@ -757,3 +643,17 @@ blogContainer.querySelectorAll(".blog-card-item").forEach(card => {
     });
 });
 }
+
+function debugAOS() {
+  console.log("=== AOS DEBUG ===");
+  console.log("AOS available:", typeof AOS !== "undefined");
+  console.log("Elements with data-aos:", document.querySelectorAll('[data-aos]').length);
+  console.log("Elements with aos-init:", document.querySelectorAll('.aos-init').length);
+  console.log("Elements with aos-animate:", document.querySelectorAll('.aos-animate').length);
+  if (typeof AOS !== "undefined") {
+    AOS.refresh();
+  }
+  console.log("=== END DEBUG ===");
+}
+
+window.debugAOS = debugAOS;
