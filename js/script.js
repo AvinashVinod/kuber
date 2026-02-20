@@ -7,7 +7,7 @@ const BASE_PATH = window.location.pathname.includes("/kuber/")
 
 function asset(path) {
   const result = BASE_PATH + path.replace(/^\/+/, "");
-  console.log("Asset path:", result);
+  // console.log("Asset path:", result);
   return result;
 }
 
@@ -23,10 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function debugLogo() {
   const logo = document.querySelector('img[src*="logo"]');
   if (!logo) return;
-  console.log("Logo src:", logo.src);
+  // console.log("Logo src:", logo.src);
   const img = new Image();
-  img.onload = () => console.log("✅ Logo loads");
-  img.onerror = () => console.error("❌ Logo fails");
+  // img.onload = () => console.log("✅ Logo loads");
+  // img.onerror = () => console.error("❌ Logo fails");
   img.src = logo.src;
 }
 
@@ -54,7 +54,7 @@ function loadComponentsParallel() {
     ),
   )
     .then(() => {
-      console.log("✅ All components loaded");
+      // console.log("✅ All components loaded");
       fixAssets();
       initializeNavScripts();
       handleHashRouting();
@@ -83,7 +83,7 @@ function fixAssets() {
 ===================================================== */
 function handleHashRouting() {
   const hash = window.location.hash.replace("#", "");
-  console.log("Current hash:", hash);
+  // console.log("Current hash:", hash);
   const map = {
     services: "html/services.html",
     wedding: "html/services.html",
@@ -96,12 +96,12 @@ function handleHashRouting() {
   };
 
   if (map[hash]) {
-    console.log("Loading page for hash:", hash);
+    // console.log("Loading page for hash:", hash);
     loadPage(map[hash], false);
   } else if (hash && !hash.startsWith("about") && !hash.startsWith("contact") && !hash.startsWith("gallery") && !hash.startsWith("blogs")) {
     const stored = localStorage.getItem("currentPage");
     if (stored) {
-      console.log("Restoring stored page:", stored);
+      // console.log("Restoring stored page:", stored);
       loadPage(stored, false);
     }
   }
@@ -121,7 +121,7 @@ function initAOS() {
     return;
   }
 
-  console.log("🎬 Initializing AOS...");
+  // console.log("🎬 Initializing AOS...");
 
   // 🔥 CRITICAL FIX 1: Remove ALL AOS classes from ALL elements
   document.querySelectorAll('[data-aos]').forEach(el => {
@@ -133,7 +133,7 @@ function initAOS() {
 
   // 🔥 CRITICAL FIX 2: Add data-aos to elements that need animation
   const items = document.querySelectorAll(".gallery-item, .about-page [data-aos], .services-page [data-aos]");
-  console.log(`Found ${items.length} items to animate`);
+  // console.log(`Found ${items.length} items to animate`);
   
   items.forEach((item, index) => {
     if (!item.hasAttribute("data-aos")) {
@@ -162,17 +162,17 @@ function initAOS() {
   // 🔥 CRITICAL FIX 4: Multiple refresh cycles with delays
   setTimeout(() => {
     AOS.refresh();
-    console.log("✅ AOS refreshed (1/3) - Elements:", document.querySelectorAll('[data-aos]').length);
+    // console.log("✅ AOS refreshed (1/3) - Elements:", document.querySelectorAll('[data-aos]').length);
   }, 50);
 
   setTimeout(() => {
     AOS.refresh();
-    console.log("✅ AOS refreshed (2/3)");
+    // console.log("✅ AOS refreshed (2/3)");
   }, 150);
 
   setTimeout(() => {
     AOS.refresh();
-    console.log("✅ AOS refreshed (3/3 - final)");
+    // console.log("✅ AOS refreshed (3/3 - final)");
   }, 300);
 }
 
@@ -202,7 +202,7 @@ function initializeNavScripts() {
   const closeModal = document.getElementById("close-modal");
   const ajaxLinks = document.querySelectorAll(".ajax-link");
 
-  console.log("Found ajax links:", ajaxLinks.length);
+  // console.log("Found ajax links:", ajaxLinks.length);
 
   if (spans.length >= 3) {
     spans[0].style.transform = "translateY(-8px)";
@@ -294,7 +294,6 @@ function initializeNavScripts() {
       e.preventDefault();
       const targetPage = this.getAttribute("data-target");
       const pageName = this.textContent.trim().toLowerCase().replace(/\s+/g, "-");
-      console.log("🔵 Ajax link clicked:", pageName);
       window.location.hash = pageName;
       loadPage(targetPage, true);
       if (mobileMenu?.classList.contains("translate-y-0")) {
@@ -307,7 +306,6 @@ function initializeNavScripts() {
   homeLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🏠 Home link clicked");
       window.location.hash = "";
       localStorage.removeItem("currentPage");
       window.location.href = BASE_PATH;
@@ -323,11 +321,9 @@ function initializeNavScripts() {
 function loadPage(page, scrollTop = true) {
   const container = document.getElementById("page-content");
   if (!container) {
-    console.error("❌ page-content container not found!");
     return;
   }
 
-  console.log("📄 Loading page:", page);
   localStorage.setItem("currentPage", page);
 
   if (scrollTop) {
@@ -339,7 +335,6 @@ function loadPage(page, scrollTop = true) {
 
   setTimeout(() => {
     const fullPath = asset(page);
-    console.log("   Fetching:", fullPath);
 
     fetch(fullPath + "?v=" + Date.now())
       .then((res) => {
@@ -347,8 +342,6 @@ function loadPage(page, scrollTop = true) {
         return res.text();
       })
       .then((html) => {
-        console.log("✅ Page loaded successfully");
-
         const doc = new DOMParser().parseFromString(html, "text/html");
         const newContent = doc.querySelector(".services-page, .about-page, .gallery-page, .blogs-page");
 
@@ -368,7 +361,6 @@ function loadPage(page, scrollTop = true) {
           
           // Initialize AOS after fade-in begins
           setTimeout(() => {
-            console.log("🎬 Calling initAOS after page load...");
             initAOS();
           }, 100);
         }, 50);
@@ -645,15 +637,15 @@ blogContainer.querySelectorAll(".blog-card-item").forEach(card => {
 }
 
 function debugAOS() {
-  console.log("=== AOS DEBUG ===");
-  console.log("AOS available:", typeof AOS !== "undefined");
-  console.log("Elements with data-aos:", document.querySelectorAll('[data-aos]').length);
-  console.log("Elements with aos-init:", document.querySelectorAll('.aos-init').length);
-  console.log("Elements with aos-animate:", document.querySelectorAll('.aos-animate').length);
+  // console.log("=== AOS DEBUG ===");
+  // console.log("AOS available:", typeof AOS !== "undefined");
+  // console.log("Elements with data-aos:", document.querySelectorAll('[data-aos]').length);
+  // console.log("Elements with aos-init:", document.querySelectorAll('.aos-init').length);
+  // console.log("Elements with aos-animate:", document.querySelectorAll('.aos-animate').length);
   if (typeof AOS !== "undefined") {
     AOS.refresh();
   }
-  console.log("=== END DEBUG ===");
+  // console.log("=== END DEBUG ===");
 }
 
 window.debugAOS = debugAOS;
