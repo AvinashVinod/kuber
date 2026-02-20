@@ -265,7 +265,7 @@ function initializeNavScripts() {
     card.addEventListener("click", () => {
       const videoId = card.getAttribute("data-video-id");
       if (modalIframe) {
-        modalIframe.src = `https://www.youtube.com/embed/${videoId}?si=OtbfCV0VtJ3HnMxO&autoplay=1`;
+        modalIframe.src = `https://www.youtube.com/embed/${videoId}?si=eNUm1uafksusDCrk&autoplay=1`;
       }
       modal?.classList.remove("hidden");
       modal?.classList.add("flex");
